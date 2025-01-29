@@ -119,7 +119,7 @@ private:
 
 	T root_half_length;
 	int tree_levels;
-	std::vector<TreeNode<T>*> tree;
+	std::vector<TreeNode<T>*> tree; //members of the tree will need their memory freed
 	std::vector<int> num_nodes;
 
 	int num_roots;
@@ -147,24 +147,61 @@ private:
 	bool clear_memory(int verbose)
 	{
 		print_verbose("Clearing memory...\n", verbose, 3);
-
-		cudaDeviceReset(); //free all previously allocated memory
-		if (cuda_error("cudaDeviceReset", false, __FILE__, __LINE__)) return false;
 		
-		//and set variables to nullptr
+		/******************************************************************************
+		free memory and set variables to nullptr
+		******************************************************************************/
+
+		cudaFree(states);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		states = nullptr;
+
+		cudaFree(stars);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		stars = nullptr;
+
+		cudaFree(temp_stars);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		temp_stars = nullptr;
 
+		cudaFree(binomial_coeffs);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		binomial_coeffs = nullptr;
 
+		cudaFree(ccs_init);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		ccs_init = nullptr;
+
+		cudaFree(ccs);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		ccs = nullptr;
+
+		cudaFree(fin);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		fin = nullptr;
+
+		cudaFree(errs);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		errs = nullptr;
+
+		cudaFree(has_nan);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		has_nan = nullptr;
+
+		cudaFree(caustics);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		caustics = nullptr;
+
+		cudaFree(mu_length_scales);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		mu_length_scales = nullptr;
+		
+		for	(auto& nodes : tree) //for every level in the tree, free the memory for the nodes
+		{
+			cudaFree(nodes);
+			if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+			nodes = nullptr;
+		}
 
 		print_verbose("Done clearing memory.\n\n", verbose, 3);
 		return true;
@@ -829,6 +866,20 @@ private:
 		} while (*max_num_stars_in_level > treenode::MAX_NUM_STARS_DIRECT);
 		print_verbose("\n", verbose, 3);
 		set_param("tree_levels", tree_levels, tree_levels, verbose, verbose > 2);
+
+
+		cudaFree(max_num_stars_in_level);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		max_num_stars_in_level = nullptr;
+
+		cudaFree(min_num_stars_in_level);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		min_num_stars_in_level = nullptr;
+
+		cudaFree(num_nonempty_nodes);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		num_nonempty_nodes = nullptr;
+
 
 		t_elapsed = stopwatch.stop();
 		print_verbose("Done creating children and sorting stars. Elapsed time: " << t_elapsed << " seconds.\n\n", verbose, 1);

@@ -88,14 +88,21 @@ private:
 	bool clear_memory(int verbose)
 	{
 		print_verbose("Clearing memory...\n", verbose, 3);
-
-		cudaDeviceReset(); //free all previously allocated memory
-		if (cuda_error("cudaDeviceReset", false, __FILE__, __LINE__)) return false;
 		
-		//and set variables to nullptr
+		/******************************************************************************
+		free memory and set variables to nullptr
+		******************************************************************************/
+
+		cudaFree(caustics);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		caustics = nullptr;
+
+		cudaFree(num_crossings);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		num_crossings = nullptr;
 
+		cudaFree(histogram);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
 		histogram = nullptr;
 
 		print_verbose("Done clearing memory.\n\n", verbose, 3);
@@ -280,6 +287,11 @@ private:
 		if (cuda_error("find_num_caustic_crossings_kernel", true, __FILE__, __LINE__)) return false;
 		t_ncc = stopwatch.stop();
 		print_verbose("\nDone calculating number of caustic crossings. Elapsed time: " << t_ncc << " seconds.\n\n", verbose, 1);
+
+
+		cudaFree(percentage);
+		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		percentage = nullptr;
 
 
 		/******************************************************************************
