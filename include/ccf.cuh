@@ -197,55 +197,88 @@ private:
 		free memory and set variables to nullptr
 		******************************************************************************/
 
-		cudaFree(states);
-		if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
-		states = nullptr;
-
-		cudaFree(stars);
-		if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
-		stars = nullptr;
-
-		cudaFree(temp_stars);
-		if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
-		temp_stars = nullptr;
-
-		cudaFree(binomial_coeffs);
-		if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
-		binomial_coeffs = nullptr;
-
-		cudaFree(ccs_init);
-		if (cuda_error("cudaFree(*ccs_init)", false, __FILE__, __LINE__)) return false;
-		ccs_init = nullptr;
-
-		cudaFree(ccs);
-		if (cuda_error("cudaFree(*ccs)", false, __FILE__, __LINE__)) return false;
-		ccs = nullptr;
-
-		cudaFree(fin);
-		if (cuda_error("cudaFree(*fin)", false, __FILE__, __LINE__)) return false;
-		fin = nullptr;
-
-		cudaFree(errs);
-		if (cuda_error("cudaFree(*errs)", false, __FILE__, __LINE__)) return false;
-		errs = nullptr;
-
-		cudaFree(has_nan);
-		if (cuda_error("cudaFree(*has_nan)", false, __FILE__, __LINE__)) return false;
-		has_nan = nullptr;
-
-		cudaFree(caustics);
-		if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
-		caustics = nullptr;
-
-		cudaFree(mu_length_scales);
-		if (cuda_error("cudaFree(*mu_length_scales)", false, __FILE__, __LINE__)) return false;
-		mu_length_scales = nullptr;
-		
-		for	(auto& nodes : tree) //for every level in the tree, free the memory for the nodes
+		if (states)
 		{
-			cudaFree(nodes);
-			if (cuda_error("cudaFree(*nodes)", false, __FILE__, __LINE__)) return false;
-			nodes = nullptr;
+			cudaFree(states);
+			if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
+			states = nullptr;
+		}
+
+		if (stars)
+		{
+			cudaFree(stars);
+			if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
+			stars = nullptr;
+		}
+
+		if (temp_stars)
+		{
+			cudaFree(temp_stars);
+			if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
+			temp_stars = nullptr;
+		}
+
+		if (binomial_coeffs)
+		{
+			cudaFree(binomial_coeffs);
+			if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
+			binomial_coeffs = nullptr;
+		}
+
+		if (ccs_init)
+		{
+			cudaFree(ccs_init);
+			if (cuda_error("cudaFree(*ccs_init)", false, __FILE__, __LINE__)) return false;
+			ccs_init = nullptr;
+		}
+
+		if (ccs)
+		{
+			cudaFree(ccs);
+			if (cuda_error("cudaFree(*ccs)", false, __FILE__, __LINE__)) return false;
+			ccs = nullptr;
+		}
+
+		if (fin)
+		{
+			cudaFree(fin);
+			if (cuda_error("cudaFree(*fin)", false, __FILE__, __LINE__)) return false;
+			fin = nullptr;
+		}
+
+		if (errs)
+		{
+			cudaFree(errs);
+			if (cuda_error("cudaFree(*errs)", false, __FILE__, __LINE__)) return false;
+			errs = nullptr;
+		}
+
+		if (has_nan)
+		{
+			cudaFree(has_nan);
+			if (cuda_error("cudaFree(*has_nan)", false, __FILE__, __LINE__)) return false;
+			has_nan = nullptr;
+		}
+
+		if (caustics)
+		{
+			cudaFree(caustics);
+			if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
+			caustics = nullptr;
+		}
+
+		if (mu_length_scales)
+		{
+			cudaFree(mu_length_scales);
+			if (cuda_error("cudaFree(*mu_length_scales)", false, __FILE__, __LINE__)) return false;
+			mu_length_scales = nullptr;
+		}
+
+		for	(int i = 0; i < tree.size(); i++) //for every level in the tree, free the memory for the nodes
+		{
+			cudaFree(tree[i]);
+			if (cuda_error("cudaFree(*tree[i])", false, __FILE__, __LINE__)) return false;
+			tree[i] = nullptr;
 		}
 
 		print_verbose("Done clearing memory.\n\n", verbose, 3);
@@ -868,17 +901,26 @@ private:
 		set_param("tree_levels", tree_levels, tree_levels, verbose, verbose > 2);
 
 
-		cudaFree(max_num_stars_in_level);
-		if (cuda_error("cudaFree(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
-		max_num_stars_in_level = nullptr;
+		if (max_num_stars_in_level)
+		{
+			cudaFree(max_num_stars_in_level);
+			if (cuda_error("cudaFree(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
+			max_num_stars_in_level = nullptr;
+		}
 
-		cudaFree(min_num_stars_in_level);
-		if (cuda_error("cudaFree(*min_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
-		min_num_stars_in_level = nullptr;
+		if (min_num_stars_in_level)
+		{
+			cudaFree(min_num_stars_in_level);
+			if (cuda_error("cudaFree(*min_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
+			min_num_stars_in_level = nullptr;
+		}
 
-		cudaFree(num_nonempty_nodes);
-		if (cuda_error("cudaFree(*num_nonempty_nodes)", false, __FILE__, __LINE__)) return false;
-		num_nonempty_nodes = nullptr;
+		if (num_nonempty_nodes)
+		{
+			cudaFree(num_nonempty_nodes);
+			if (cuda_error("cudaFree(*num_nonempty_nodes)", false, __FILE__, __LINE__)) return false;
+			num_nonempty_nodes = nullptr;
+		}
 
 
 		t_elapsed = stopwatch.stop();

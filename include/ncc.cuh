@@ -138,17 +138,26 @@ private:
 		free memory and set variables to nullptr
 		******************************************************************************/
 
-		cudaFree(caustics);
-		if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
-		caustics = nullptr;
+		if (caustics)
+		{
+			cudaFree(caustics);
+			if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
+			caustics = nullptr;
+		}
 
-		cudaFree(num_crossings);
-		if (cuda_error("cudaFree(*num_crossings)", false, __FILE__, __LINE__)) return false;
-		num_crossings = nullptr;
+		if (num_crossings)
+		{
+			cudaFree(num_crossings);
+			if (cuda_error("cudaFree(*num_crossings)", false, __FILE__, __LINE__)) return false;
+			num_crossings = nullptr;
+		}
 
-		cudaFree(histogram);
-		if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
-		histogram = nullptr;
+		if (histogram)
+		{
+			cudaFree(histogram);
+			if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
+			histogram = nullptr;
+		}
 
 		print_verbose("Done clearing memory.\n\n", verbose, 3);
 		return true;
@@ -289,9 +298,12 @@ private:
 		print_verbose("\nDone calculating number of caustic crossings. Elapsed time: " << t_ncc << " seconds.\n\n", verbose, 1);
 
 
-		cudaFree(percentage);
-		if (cuda_error("cudaFree(*percentage)", false, __FILE__, __LINE__)) return false;
-		percentage = nullptr;
+		if (percentage)
+		{
+			cudaFree(percentage);
+			if (cuda_error("cudaFree(*percentage)", false, __FILE__, __LINE__)) return false;
+			percentage = nullptr;
+		}
 
 
 		/******************************************************************************
@@ -453,8 +465,8 @@ public:
 
 	bool run(int verbose)
 	{
-		if (!clear_memory(verbose)) return false;
 		if (!set_cuda_devices(verbose)) return false;
+		if (!clear_memory(verbose)) return false;
 		if (!check_input_params(verbose)) return false;
 		if (!read_caustics(verbose)) return false;
 		if (!allocate_initialize_memory(verbose)) return false;
