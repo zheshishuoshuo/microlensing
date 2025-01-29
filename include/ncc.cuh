@@ -85,30 +85,6 @@ private:
 
 	
 
-	bool clear_memory(int verbose)
-	{
-		print_verbose("Clearing memory...\n", verbose, 3);
-		
-		/******************************************************************************
-		free memory and set variables to nullptr
-		******************************************************************************/
-
-		cudaFree(caustics);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		caustics = nullptr;
-
-		cudaFree(num_crossings);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		num_crossings = nullptr;
-
-		cudaFree(histogram);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		histogram = nullptr;
-
-		print_verbose("Done clearing memory.\n\n", verbose, 3);
-		return true;
-	}
-
 	bool set_cuda_devices(int verbose)
 	{
 		print_verbose("Setting device...\n", verbose, 3);
@@ -151,6 +127,30 @@ private:
 		if (cuda_error("cudaGetDeviceProperties", false, __FILE__, __LINE__)) return false;
 
 		print_verbose("Done setting device.\n\n", verbose, 3);
+		return true;
+	}
+
+	bool clear_memory(int verbose)
+	{
+		print_verbose("Clearing memory...\n", verbose, 3);
+		
+		/******************************************************************************
+		free memory and set variables to nullptr
+		******************************************************************************/
+
+		cudaFree(caustics);
+		if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
+		caustics = nullptr;
+
+		cudaFree(num_crossings);
+		if (cuda_error("cudaFree(*num_crossings)", false, __FILE__, __LINE__)) return false;
+		num_crossings = nullptr;
+
+		cudaFree(histogram);
+		if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
+		histogram = nullptr;
+
+		print_verbose("Done clearing memory.\n\n", verbose, 3);
 		return true;
 	}
 
@@ -290,7 +290,7 @@ private:
 
 
 		cudaFree(percentage);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		if (cuda_error("cudaFree(*percentage)", false, __FILE__, __LINE__)) return false;
 		percentage = nullptr;
 
 

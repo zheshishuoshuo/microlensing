@@ -154,65 +154,6 @@ private:
 
 
 
-	bool clear_memory(int verbose)
-	{
-		print_verbose("Clearing memory...\n", verbose, 3);
-		
-		/******************************************************************************
-		free memory and set variables to nullptr
-		******************************************************************************/
-
-		cudaFree(states);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		states = nullptr;
-
-		cudaFree(stars);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		stars = nullptr;
-
-		cudaFree(temp_stars);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		temp_stars = nullptr;
-
-		cudaFree(binomial_coeffs);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		binomial_coeffs = nullptr;
-
-		cudaFree(pixels);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		pixels = nullptr;
-
-		cudaFree(pixels_minima);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		pixels_minima = nullptr;
-
-		cudaFree(pixels_saddles);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		pixels_saddles = nullptr;
-
-		cudaFree(histogram);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		histogram = nullptr;
-
-		cudaFree(histogram_minima);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		histogram_minima = nullptr;
-
-		cudaFree(histogram_saddles);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-		histogram_saddles = nullptr;
-		
-		for	(auto& nodes : tree) //for every level in the tree, free the memory for the nodes
-		{
-			cudaFree(nodes);
-			if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
-			nodes = nullptr;
-		}
-
-		print_verbose("Done clearing memory.\n\n", verbose, 3);
-		return true;
-	}
-
 	bool set_cuda_devices(int verbose)
 	{
 		print_verbose("Setting device...\n", verbose, 3);
@@ -255,6 +196,65 @@ private:
 		if (cuda_error("cudaGetDeviceProperties", false, __FILE__, __LINE__)) return false;
 
 		print_verbose("Done setting device.\n\n", verbose, 3);
+		return true;
+	}
+
+	bool clear_memory(int verbose)
+	{
+		print_verbose("Clearing memory...\n", verbose, 3);
+		
+		/******************************************************************************
+		free memory and set variables to nullptr
+		******************************************************************************/
+
+		cudaFree(states);
+		if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
+		states = nullptr;
+
+		cudaFree(stars);
+		if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
+		stars = nullptr;
+
+		cudaFree(temp_stars);
+		if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
+		temp_stars = nullptr;
+
+		cudaFree(binomial_coeffs);
+		if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
+		binomial_coeffs = nullptr;
+
+		cudaFree(pixels);
+		if (cuda_error("cudaFree(*pixels)", false, __FILE__, __LINE__)) return false;
+		pixels = nullptr;
+
+		cudaFree(pixels_minima);
+		if (cuda_error("cudaFree(*pixels_minima)", false, __FILE__, __LINE__)) return false;
+		pixels_minima = nullptr;
+
+		cudaFree(pixels_saddles);
+		if (cuda_error("cudaFree(*pixels_saddles)", false, __FILE__, __LINE__)) return false;
+		pixels_saddles = nullptr;
+
+		cudaFree(histogram);
+		if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
+		histogram = nullptr;
+
+		cudaFree(histogram_minima);
+		if (cuda_error("cudaFree(*histogram_minima)", false, __FILE__, __LINE__)) return false;
+		histogram_minima = nullptr;
+
+		cudaFree(histogram_saddles);
+		if (cuda_error("cudaFree(*histogram_saddles)", false, __FILE__, __LINE__)) return false;
+		histogram_saddles = nullptr;
+		
+		for	(auto& nodes : tree) //for every level in the tree, free the memory for the nodes
+		{
+			cudaFree(nodes);
+			if (cuda_error("cudaFree(*nodes)", false, __FILE__, __LINE__)) return false;
+			nodes = nullptr;
+		}
+
+		print_verbose("Done clearing memory.\n\n", verbose, 3);
 		return true;
 	}
 
@@ -866,15 +866,15 @@ private:
 
 
 		cudaFree(max_num_stars_in_level);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		if (cuda_error("cudaFree(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
 		max_num_stars_in_level = nullptr;
 
 		cudaFree(min_num_stars_in_level);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		if (cuda_error("cudaFree(*min_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
 		min_num_stars_in_level = nullptr;
 
 		cudaFree(num_nonempty_nodes);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		if (cuda_error("cudaFree(*num_nonempty_nodes)", false, __FILE__, __LINE__)) return false;
 		num_nonempty_nodes = nullptr;
 
 
@@ -976,7 +976,7 @@ private:
 
 
 		cudaFree(percentage);
-		if (cuda_error("cudaFree", false, __FILE__, __LINE__)) return false;
+		if (cuda_error("cudaFree(*percentage)", false, __FILE__, __LINE__)) return false;
 		percentage = nullptr;
 
 
@@ -1276,8 +1276,8 @@ public:
 
 	bool run(int verbose)
 	{
-		if (!clear_memory(verbose)) return false;
 		if (!set_cuda_devices(verbose)) return false;
+		if (!clear_memory(verbose)) return false;
 		if (!check_input_params(verbose)) return false;
 		if (!calculate_derived_params(verbose)) return false;
 		if (!allocate_initialize_memory(verbose)) return false;
