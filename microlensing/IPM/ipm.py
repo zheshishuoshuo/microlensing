@@ -1,5 +1,6 @@
 from . import lib_ipm
 from . import lib_ipm_double
+from microlensing.Stars.stars import Stars
 
 import numpy as np
 
@@ -412,8 +413,9 @@ class IPM(object):
             self.magnifications_minima = None
             self.magnifications_saddles = None
 
-        self.stars = np.ctypeslib.as_array(self.lib.get_stars(self.obj),
-                                           shape=(self.num_stars, 3)).copy()
+        self.stars = Stars(self.rectangular, self.corner, self.theta_star,
+                           np.ctypeslib.as_array(self.lib.get_stars(self.obj),
+                                                 shape=(self.num_stars, 3)).copy())
         
     @property
     def t_shoot_cells(self):
