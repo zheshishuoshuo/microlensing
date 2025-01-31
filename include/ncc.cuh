@@ -75,13 +75,13 @@ private:
 	/******************************************************************************
 	dynamic memory
 	******************************************************************************/
-	Complex<T>* caustics;
-	int* num_crossings;
+	Complex<T>* caustics = nullptr;
+	int* num_crossings = nullptr;
 
 	int min_num;
 	int max_num;
 	int histogram_length;
-	int* histogram;
+	int* histogram = nullptr;
 
 	
 
@@ -138,26 +138,17 @@ private:
 		free memory and set variables to nullptr
 		******************************************************************************/
 
-		if (caustics)
-		{
-			cudaFree(caustics);
-			if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
-			caustics = nullptr;
-		}
-
-		if (num_crossings)
-		{
-			cudaFree(num_crossings);
-			if (cuda_error("cudaFree(*num_crossings)", false, __FILE__, __LINE__)) return false;
-			num_crossings = nullptr;
-		}
-
-		if (histogram)
-		{
-			cudaFree(histogram);
-			if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
-			histogram = nullptr;
-		}
+		cudaFree(caustics);
+		if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
+		caustics = nullptr;
+		
+		cudaFree(num_crossings);
+		if (cuda_error("cudaFree(*num_crossings)", false, __FILE__, __LINE__)) return false;
+		num_crossings = nullptr;
+		
+		cudaFree(histogram);
+		if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
+		histogram = nullptr;
 
 		print_verbose("Done clearing memory.\n\n", verbose, 3);
 		return true;
@@ -298,12 +289,9 @@ private:
 		print_verbose("\nDone calculating number of caustic crossings. Elapsed time: " << t_ncc << " seconds.\n\n", verbose, 1);
 
 
-		if (percentage)
-		{
-			cudaFree(percentage);
-			if (cuda_error("cudaFree(*percentage)", false, __FILE__, __LINE__)) return false;
-			percentage = nullptr;
-		}
+		cudaFree(percentage);
+		if (cuda_error("cudaFree(*percentage)", false, __FILE__, __LINE__)) return false;
+		percentage = nullptr;
 
 
 		/******************************************************************************

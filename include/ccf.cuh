@@ -128,19 +128,19 @@ private:
 	/******************************************************************************
 	dynamic memory
 	******************************************************************************/
-	curandState* states;
-	star<T>* stars;
-	star<T>* temp_stars;
+	curandState* states = nullptr;
+	star<T>* stars = nullptr;
+	star<T>* temp_stars = nullptr;
 
-	int* binomial_coeffs;
+	int* binomial_coeffs = nullptr;
 
-	Complex<T>* ccs_init;
-	Complex<T>* ccs;
-	bool* fin;
-	T* errs;
-	int* has_nan;
-	Complex<T>* caustics;
-	T* mu_length_scales;
+	Complex<T>* ccs_init = nullptr;
+	Complex<T>* ccs = nullptr;
+	bool* fin = nullptr;
+	T* errs = nullptr;
+	int* has_nan = nullptr;
+	Complex<T>* caustics = nullptr;
+	T* mu_length_scales = nullptr;
 
 
 
@@ -197,82 +197,49 @@ private:
 		free memory and set variables to nullptr
 		******************************************************************************/
 
-		if (states)
-		{
-			cudaFree(states);
-			if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
-			states = nullptr;
-		}
-
-		if (stars)
-		{
-			cudaFree(stars);
-			if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
-			stars = nullptr;
-		}
-
-		if (temp_stars)
-		{
-			cudaFree(temp_stars);
-			if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
-			temp_stars = nullptr;
-		}
-
-		if (binomial_coeffs)
-		{
-			cudaFree(binomial_coeffs);
-			if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
-			binomial_coeffs = nullptr;
-		}
-
-		if (ccs_init)
-		{
-			cudaFree(ccs_init);
-			if (cuda_error("cudaFree(*ccs_init)", false, __FILE__, __LINE__)) return false;
-			ccs_init = nullptr;
-		}
-
-		if (ccs)
-		{
-			cudaFree(ccs);
-			if (cuda_error("cudaFree(*ccs)", false, __FILE__, __LINE__)) return false;
-			ccs = nullptr;
-		}
-
-		if (fin)
-		{
-			cudaFree(fin);
-			if (cuda_error("cudaFree(*fin)", false, __FILE__, __LINE__)) return false;
-			fin = nullptr;
-		}
-
-		if (errs)
-		{
-			cudaFree(errs);
-			if (cuda_error("cudaFree(*errs)", false, __FILE__, __LINE__)) return false;
-			errs = nullptr;
-		}
-
-		if (has_nan)
-		{
-			cudaFree(has_nan);
-			if (cuda_error("cudaFree(*has_nan)", false, __FILE__, __LINE__)) return false;
-			has_nan = nullptr;
-		}
-
-		if (caustics)
-		{
-			cudaFree(caustics);
-			if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
-			caustics = nullptr;
-		}
-
-		if (mu_length_scales)
-		{
-			cudaFree(mu_length_scales);
-			if (cuda_error("cudaFree(*mu_length_scales)", false, __FILE__, __LINE__)) return false;
-			mu_length_scales = nullptr;
-		}
+		cudaFree(states);
+		if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
+		states = nullptr;
+		
+		cudaFree(stars);
+		if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
+		stars = nullptr;
+		
+		cudaFree(temp_stars);
+		if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
+		temp_stars = nullptr;
+		
+		cudaFree(binomial_coeffs);
+		if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
+		binomial_coeffs = nullptr;
+		
+		cudaFree(ccs_init);
+		if (cuda_error("cudaFree(*ccs_init)", false, __FILE__, __LINE__)) return false;
+		ccs_init = nullptr;
+		
+		cudaFree(ccs);
+		if (cuda_error("cudaFree(*ccs)", false, __FILE__, __LINE__)) return false;
+		ccs = nullptr;
+		
+		cudaFree(fin);
+		if (cuda_error("cudaFree(*fin)", false, __FILE__, __LINE__)) return false;
+		fin = nullptr;
+		
+		cudaFree(errs);
+		if (cuda_error("cudaFree(*errs)", false, __FILE__, __LINE__)) return false;
+		errs = nullptr;
+		
+		cudaFree(has_nan);
+		if (cuda_error("cudaFree(*has_nan)", false, __FILE__, __LINE__)) return false;
+		has_nan = nullptr;
+		
+		cudaFree(caustics);
+		if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
+		caustics = nullptr;
+		
+		cudaFree(mu_length_scales);
+		if (cuda_error("cudaFree(*mu_length_scales)", false, __FILE__, __LINE__)) return false;
+		mu_length_scales = nullptr;
 
 		for	(int i = 0; i < tree.size(); i++) //for every level in the tree, free the memory for the nodes
 		{
@@ -835,9 +802,9 @@ private:
 		tree[0][0].numstars = num_stars;
 
 
-		int* max_num_stars_in_level;
-		int* min_num_stars_in_level;
-		int* num_nonempty_nodes;
+		int* max_num_stars_in_level = nullptr;
+		int* min_num_stars_in_level = nullptr;
+		int* num_nonempty_nodes = nullptr;
 		cudaMallocManaged(&max_num_stars_in_level, sizeof(int));
 		if (cuda_error("cudaMallocManaged(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
 		cudaMallocManaged(&min_num_stars_in_level, sizeof(int));
@@ -901,26 +868,17 @@ private:
 		set_param("tree_levels", tree_levels, tree_levels, verbose, verbose > 2);
 
 
-		if (max_num_stars_in_level)
-		{
-			cudaFree(max_num_stars_in_level);
-			if (cuda_error("cudaFree(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
-			max_num_stars_in_level = nullptr;
-		}
-
-		if (min_num_stars_in_level)
-		{
-			cudaFree(min_num_stars_in_level);
-			if (cuda_error("cudaFree(*min_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
-			min_num_stars_in_level = nullptr;
-		}
-
-		if (num_nonempty_nodes)
-		{
-			cudaFree(num_nonempty_nodes);
-			if (cuda_error("cudaFree(*num_nonempty_nodes)", false, __FILE__, __LINE__)) return false;
-			num_nonempty_nodes = nullptr;
-		}
+		cudaFree(max_num_stars_in_level);
+		if (cuda_error("cudaFree(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
+		max_num_stars_in_level = nullptr;
+		
+		cudaFree(min_num_stars_in_level);
+		if (cuda_error("cudaFree(*min_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
+		min_num_stars_in_level = nullptr;
+		
+		cudaFree(num_nonempty_nodes);
+		if (cuda_error("cudaFree(*num_nonempty_nodes)", false, __FILE__, __LINE__)) return false;
+		num_nonempty_nodes = nullptr;
 
 
 		t_elapsed = stopwatch.stop();

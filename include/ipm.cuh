@@ -131,29 +131,29 @@ private:
 	/******************************************************************************
 	dynamic memory
 	******************************************************************************/
-	curandState* states;
-	star<T>* stars;
-	star<T>* temp_stars;
+	curandState* states = nullptr;
+	star<T>* stars = nullptr;
+	star<T>* temp_stars = nullptr;
 
-	int* binomial_coeffs;
+	int* binomial_coeffs = nullptr;
 
-	T* pixels;
-	T* pixels_minima;
-	T* pixels_saddles;
+	T* pixels = nullptr;
+	T* pixels_minima = nullptr;
+	T* pixels_saddles = nullptr;
 
 	int min_mag;
 	int max_mag;
 	int histogram_length;
-	int* histogram;
-	int* histogram_minima;
-	int* histogram_saddles;
+	int* histogram = nullptr;
+	int* histogram_minima = nullptr;
+	int* histogram_saddles = nullptr;
 
 	int min_log_mag;
 	int max_log_mag;
 	int log_histogram_length;
-	int* log_histogram;
-	int* log_histogram_minima;
-	int* log_histogram_saddles;
+	int* log_histogram = nullptr;
+	int* log_histogram_minima = nullptr;
+	int* log_histogram_saddles = nullptr;
 
 
 
@@ -210,96 +210,57 @@ private:
 		free memory and set variables to nullptr
 		******************************************************************************/
 
-		if (states)
-		{
-			cudaFree(states);
-			if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
-			states = nullptr;
-		}
-
-		if (states)
-		{
-			cudaFree(stars);
-			if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
-			stars = nullptr;
-		}
-
-		if (temp_stars)
-		{
-			cudaFree(temp_stars);
-			if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
-			temp_stars = nullptr;
-		}
-
-		if (binomial_coeffs)
-		{
-			cudaFree(binomial_coeffs);
-			if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
-			binomial_coeffs = nullptr;
-		}
-
-		if (pixels)
-		{
-			cudaFree(pixels);
-			if (cuda_error("cudaFree(*pixels)", false, __FILE__, __LINE__)) return false;
-			pixels = nullptr;
-		}
-
-		if (pixels_minima)
-		{
-			cudaFree(pixels_minima);
-			if (cuda_error("cudaFree(*pixels_minima)", false, __FILE__, __LINE__)) return false;
-			pixels_minima = nullptr;
-		}
-
-		if (pixels_saddles)
-		{
-			cudaFree(pixels_saddles);
-			if (cuda_error("cudaFree(*pixels_saddles)", false, __FILE__, __LINE__)) return false;
-			pixels_saddles = nullptr;
-		}
-
-		if (histogram)
-		{
-			cudaFree(histogram);
-			if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
-			histogram = nullptr;
-		}
-
-		if (histogram_minima)
-		{
-			cudaFree(histogram_minima);
-			if (cuda_error("cudaFree(*histogram_minima)", false, __FILE__, __LINE__)) return false;
-			histogram_minima = nullptr;
-		}
-
-		if (histogram_saddles)
-		{
-			cudaFree(histogram_saddles);
-			if (cuda_error("cudaFree(*histogram_saddles)", false, __FILE__, __LINE__)) return false;
-			histogram_saddles = nullptr;
-		}
-
-		if (log_histogram)
-		{
-			cudaFree(log_histogram);
-			if (cuda_error("cudaFree(*log_histogram)", false, __FILE__, __LINE__)) return false;
-			log_histogram = nullptr;
-		}
-
-		if (log_histogram_minima)
-		{
-			cudaFree(log_histogram_minima);
-			if (cuda_error("cudaFree(*log_histogram_minima)", false, __FILE__, __LINE__)) return false;
-			log_histogram_minima = nullptr;
-		}
-
-		if (log_histogram_saddles)
-		{
-			cudaFree(log_histogram_saddles);
-			if (cuda_error("cudaFree(*log_histogram_saddles)", false, __FILE__, __LINE__)) return false;
-			log_histogram_saddles = nullptr;
-		}
+		cudaFree(states);
+		if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
+		states = nullptr;
+		
+		cudaFree(stars);
+		if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
+		stars = nullptr;
+		
+		cudaFree(temp_stars);
+		if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
+		temp_stars = nullptr;
+		
+		cudaFree(binomial_coeffs);
+		if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
+		binomial_coeffs = nullptr;
+		
+		cudaFree(pixels);
+		if (cuda_error("cudaFree(*pixels)", false, __FILE__, __LINE__)) return false;
+		pixels = nullptr;
+		
+		cudaFree(pixels_minima);
+		if (cuda_error("cudaFree(*pixels_minima)", false, __FILE__, __LINE__)) return false;
+		pixels_minima = nullptr;
+		
+		cudaFree(pixels_saddles);
+		if (cuda_error("cudaFree(*pixels_saddles)", false, __FILE__, __LINE__)) return false;
+		pixels_saddles = nullptr;
+		
+		cudaFree(histogram);
+		if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
+		histogram = nullptr;
+		
+		cudaFree(histogram_minima);
+		if (cuda_error("cudaFree(*histogram_minima)", false, __FILE__, __LINE__)) return false;
+		histogram_minima = nullptr;
+		
+		cudaFree(histogram_saddles);
+		if (cuda_error("cudaFree(*histogram_saddles)", false, __FILE__, __LINE__)) return false;
+		histogram_saddles = nullptr;
+		
+		cudaFree(log_histogram);
+		if (cuda_error("cudaFree(*log_histogram)", false, __FILE__, __LINE__)) return false;
+		log_histogram = nullptr;
+		
+		cudaFree(log_histogram_minima);
+		if (cuda_error("cudaFree(*log_histogram_minima)", false, __FILE__, __LINE__)) return false;
+		log_histogram_minima = nullptr;
+		
+		cudaFree(log_histogram_saddles);
+		if (cuda_error("cudaFree(*log_histogram_saddles)", false, __FILE__, __LINE__)) return false;
+		log_histogram_saddles = nullptr;
 
 		for	(int i = 0; i < tree.size(); i++) //for every level in the tree, free the memory for the nodes
 		{
@@ -853,9 +814,9 @@ private:
 		tree[0][0].numstars = num_stars;
 
 
-		int* max_num_stars_in_level;
-		int* min_num_stars_in_level;
-		int* num_nonempty_nodes;
+		int* max_num_stars_in_level = nullptr;
+		int* min_num_stars_in_level = nullptr;
+		int* num_nonempty_nodes = nullptr;
 		cudaMallocManaged(&max_num_stars_in_level, sizeof(int));
 		if (cuda_error("cudaMallocManaged(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
 		cudaMallocManaged(&min_num_stars_in_level, sizeof(int));
@@ -919,26 +880,17 @@ private:
 		set_param("tree_levels", tree_levels, tree_levels, verbose, verbose > 2);
 
 
-		if (max_num_stars_in_level)
-		{
-			cudaFree(max_num_stars_in_level);
-			if (cuda_error("cudaFree(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
-			max_num_stars_in_level = nullptr;
-		}
-
-		if (min_num_stars_in_level)
-		{
-			cudaFree(min_num_stars_in_level);
-			if (cuda_error("cudaFree(*min_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
-			min_num_stars_in_level = nullptr;
-		}
-
-		if (num_nonempty_nodes)
-		{
-			cudaFree(num_nonempty_nodes);
-			if (cuda_error("cudaFree(*num_nonempty_nodes)", false, __FILE__, __LINE__)) return false;
-			num_nonempty_nodes = nullptr;
-		}
+		cudaFree(max_num_stars_in_level);
+		if (cuda_error("cudaFree(*max_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
+		max_num_stars_in_level = nullptr;
+		
+		cudaFree(min_num_stars_in_level);
+		if (cuda_error("cudaFree(*min_num_stars_in_level)", false, __FILE__, __LINE__)) return false;
+		min_num_stars_in_level = nullptr;
+		
+		cudaFree(num_nonempty_nodes);
+		if (cuda_error("cudaFree(*num_nonempty_nodes)", false, __FILE__, __LINE__)) return false;
+		num_nonempty_nodes = nullptr;
 
 
 		t_elapsed = stopwatch.stop();
@@ -1038,12 +990,9 @@ private:
 		print_verbose("\nDone shooting cells. Elapsed time: " << t_shoot_cells << " seconds.\n\n", verbose, 1);
 
 
-		if (percentage)
-		{
-			cudaFree(percentage);
-			if (cuda_error("cudaFree(*percentage)", false, __FILE__, __LINE__)) return false;
-			percentage = nullptr;
-		}
+		cudaFree(percentage);
+		if (cuda_error("cudaFree(*percentage)", false, __FILE__, __LINE__)) return false;
+		percentage = nullptr;
 
 
 		if (write_parities)
