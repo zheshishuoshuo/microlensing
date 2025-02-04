@@ -4,7 +4,6 @@ from microlensing.Stars.stars import Stars
 from microlensing.MagMap.mag_map import MagMap
 
 import numpy as np
-import matplotlib.axes
 
 
 class IPM(object):

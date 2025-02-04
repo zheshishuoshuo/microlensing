@@ -1,4 +1,5 @@
 from . import lib_ccf
+from microlensing.Stars.stars import Stars
 
 import numpy as np
 
@@ -335,8 +336,9 @@ class CCF(object):
         else:
             self.mu_length_scales = None
 
-        self.stars = np.ctypeslib.as_array(self.lib.get_stars(self.obj),
-                                           shape=(self.num_stars, 3)).copy()
+        self.stars = Stars(self.rectangular, self.corner, self.theta_star,
+                           np.ctypeslib.as_array(self.lib.get_stars(self.obj),
+                                                 shape=(self.num_stars, 3)).copy())
         
     @property
     def t_ccs(self):

@@ -2,6 +2,7 @@ from . import lib_ncc
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.axes
 
 
 class NCC(object):
@@ -184,7 +185,7 @@ class NCC(object):
         if not self.lib.save(self.obj, self.verbose):
             raise Exception("Error saving NCC")
 
-    def plot_map(self, fig, ax, **kwargs):
+    def plot_map(self, ax: matplotlib.axes.Axes, **kwargs):
         if 'vmin' not in kwargs.keys():
             kwargs['vmin'] = np.min(self.num_caustic_crossings) - 0.5
         if 'vmax' not in kwargs.keys():
@@ -201,14 +202,14 @@ class NCC(object):
                   (self.center[1] + self.half_length[1])]
 
         img = ax.imshow(self.num_caustic_crossings, extent=extent, **kwargs)
-        fig.colorbar(img, label='$N_{\\text{microminima}}$')
+        ax.get_figure().colorbar(img, label='$N_{\\text{microminima}}$')
 
         ax.set_xlabel('$y_1$')
         ax.set_ylabel('$y_2$')
 
         ax.set_aspect(self.half_length[0] / self.half_length[1])
 
-    def plot_hist(self, fig, ax, bins=None, **kwargs):
+    def plot_hist(self, ax: matplotlib.axes.Axes, bins=None, **kwargs):
         if bins is None:
             vmin, vmax = (np.min(self.magnitudes) - 0.5, np.max(self.magnitudes) + 0.5)
             bins = np.arange(vmin, vmax, 1)
