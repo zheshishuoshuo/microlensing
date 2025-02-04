@@ -39,8 +39,15 @@ class Stars():
         return np.mean(self.stars[:, 2]**2 * np.log(self.stars[:, 2]))
 
     def plot(self, ax, **kwargs):
-        if 's' not in kwargs.keys():
-            kwargs['s'] = self.stars[:, 2]
+        if 's' not in kwargs.keys() and 'sizes' not in kwargs.keys():
+            kwargs['s'] = 10 * self.stars[:, 2]
+        else:
+            kwargs['s'] = kwargs['s'] * self.stars[:, 2]
+        if 'c' not in kwargs.keys() and 'color' not in kwargs.keys():
+            kwargs['c'] = 'black'
+        if 'marker' not in kwargs.keys():
+            kwargs['marker'] = '*'
+
 
         ax.scatter(self.stars[:, 0] / self.theta_star,
                    self.stars[:, 1] / self.theta_star,

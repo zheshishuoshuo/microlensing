@@ -1,8 +1,10 @@
 from . import lib_ipm
 from . import lib_ipm_double
 from microlensing.Stars.stars import Stars
+from microlensing.MagMap.mag_map import MagMap
 
 import numpy as np
+import matplotlib.axes
 
 
 class IPM(object):
@@ -417,6 +419,9 @@ class IPM(object):
                            np.ctypeslib.as_array(self.lib.get_stars(self.obj),
                                                  shape=(self.num_stars, 3)).copy())
         
+        return MagMap(self.magnifications, self.center, self.half_length, 
+                      self.kappa_tot, self.shear, self.kappa_star, self.stars)
+        
     @property
     def t_shoot_cells(self):
         return self.lib.get_t_shoot_cells(self.obj)
@@ -440,36 +445,3 @@ class IPM(object):
     def save(self):
         if not self.lib.save(self.obj, self.verbose):
             raise Exception("Error saving IPM")
-
-    def plot_map(self, fig, ax, **kwargs):
-        if 'vmin' not in kwargs.keys():
-            kwargs['vmin'] = np.percentile(self.magnitudes.ravel(), 2.5)
-        if 'vmax' not in kwargs.keys():
-            kwargs['vmax'] = np.percentile(self.magnitudes.ravel(), 97.5)
-        if 'cmap' not in kwargs.keys():
-            kwargs['cmap'] = 'viridis_r'
-
-        extent = [(self.center[0] - self.half_length[0]) / self.theta_star,
-                  (self.center[0] + self.half_length[0]) / self.theta_star,
-                  (self.center[1] - self.half_length[1]) / self.theta_star,
-                  (self.center[1] + self.half_length[1]) / self.theta_star]
-
-        img = ax.imshow(self.magnitudes, extent=extent, **kwargs)
-        cbar = fig.colorbar(img, label='microlensing $\\Delta m$ (magnitudes)')
-        cbar.ax.invert_yaxis()
-
-        ax.set_xlabel('$y_1 / \\theta_★$')
-        ax.set_ylabel('$y_2 / \\theta_★$')
-
-        ax.set_aspect(self.half_length[0] / self.half_length[1])
-
-    def plot_hist(self, fig, ax, bins=None, **kwargs):
-        if bins is None:
-            vmin, vmax = (np.min(self.magnitudes), np.max(self.magnitudes))
-            bins = np.arange(vmin - 0.01, vmax + 0.01, 0.01)
-
-        ax.hist(self.magnitudes.ravel(), bins=bins, density=True, **kwargs)
-
-        ax.set_xlabel('microlensing $\\Delta m$ (magnitudes)')
-        ax.set_ylabel('p($\\Delta m$)')
-        ax.invert_xaxis()
