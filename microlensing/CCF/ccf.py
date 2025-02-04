@@ -2,6 +2,7 @@ from . import lib_ccf
 from microlensing.Stars.stars import Stars
 
 import numpy as np
+import matplotlib.axes
 
 
 class CCF(object):
@@ -348,14 +349,18 @@ class CCF(object):
         if not self.lib.save(self.obj, self.verbose):
             raise Exception("Error saving CCF")
 
-    def plot_critical_curves(self, fig, ax, **kwargs):
+    def plot_critical_curves(self, ax: matplotlib.axes.Axes, **kwargs):
+        if 'c' not in kwargs.keys() and 'color' not in kwargs.keys():
+            kwargs['c'] = 'black'
         
         ax.plot(self.critical_curves[:,:,0].T, self.critical_curves[:,:,1].T, **kwargs)
 
         ax.set_xlabel('$x_1 / \\theta_★$')
         ax.set_ylabel('$x_2 / \\theta_★$')
 
-    def plot_caustics(self, fig, ax, bins=None, **kwargs):
+    def plot_caustics(self, ax: matplotlib.axes.Axes, **kwargs):
+        if 'c' not in kwargs.keys() and 'color' not in kwargs.keys():
+            kwargs['c'] = 'black'
         
         ax.plot(self.caustics[:,:,0].T, self.caustics[:,:,1].T, **kwargs)
 

@@ -4,6 +4,7 @@ from microlensing.Stars.stars import Stars
 from microlensing.MagMap.mag_map import MagMap
 
 import numpy as np
+import matplotlib.axes
 
 
 class IPM(object):
@@ -444,3 +445,36 @@ class IPM(object):
     def save(self):
         if not self.lib.save(self.obj, self.verbose):
             raise Exception("Error saving IPM")
+
+    def plot(self, ax: matplotlib.axes.Axes, **kwargs):
+        if 'vmin' not in kwargs.keys():
+            kwargs['vmin'] = np.percentile(self.magnitudes.ravel(), 2.5)
+        if 'vmax' not in kwargs.keys():
+            kwargs['vmax'] = np.percentile(self.magnitudes.ravel(), 97.5)
+        if 'cmap' not in kwargs.keys():
+            kwargs['cmap'] = 'viridis_r'
+
+        extent = [(self.center[0] - self.half_length[0]) / self.theta_star,
+                  (self.center[0] + self.half_length[0]) / self.theta_star,
+                  (self.center[1] - self.half_length[1]) / self.theta_star,
+                  (self.center[1] + self.half_length[1]) / self.theta_star]
+
+        img = ax.imshow(self.magnitudes, extent=extent, **kwargs)
+        cbar = ax.get_figure().colorbar(img, label='microlensing $\\Delta m$ (magnitudes)')
+        cbar.ax.invert_yaxis()
+
+        ax.set_xlabel('$y_1 / \\theta_★$')
+        ax.set_ylabel('$y_2 / \\theta_★$')
+
+        ax.set_aspect(self.half_length[0] / self.half_length[1])
+
+    def plot_hist(self, ax: matplotlib.axes.Axes, bins=None, **kwargs):
+        if bins is None:
+            vmin, vmax = (np.min(self.magnitudes), np.max(self.magnitudes))
+            bins = np.arange(vmin - 0.01, vmax + 0.01, 0.01)
+
+        ax.hist(self.magnitudes.ravel(), bins=bins, density=True, **kwargs)
+
+        ax.set_xlabel('microlensing $\\Delta m$ (magnitudes)')
+        ax.set_ylabel('p($\\Delta m$)')
+        ax.invert_xaxis()
