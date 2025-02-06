@@ -21,7 +21,7 @@ The code is written to be independent of anything besides the C++ standard libra
 The bulk of the code is written using NVIDIA's CUDA, and you will need a CUDA installation to compile and run it. We additionally require a C++20 compliant compiler.
 
 ## Repository layout
-The `include` repository contains the bulk of the code, which is written mostly as templated objects and functions. The `src` directory contains files for creating executables and libraries (see the [python](## python) section below). The `bin` directory contains compilation output (see the section on [compiling](## Compiling)). The `microlensing` directory contains python code for ease of use (see once more the [python](## python) section below), while the root directory contains a couple example python notebooks outlining usage.
+The `include` repository contains the bulk of the code, which is written mostly as templated objects and functions. The `src` directory contains files for creating executables and libraries (see the [python](##python) section below). The `bin` directory contains compilation output (see the section on [compiling](##compiling)). The `microlensing` directory contains python code for ease of use (see once more the [python](##python) section below), while the root directory contains a couple example python notebooks outlining usage.
 
 ## Compiling
 Compilation has been tested with the GNU compiler version 12.2.0 and the CUDA HPC SDK version 23.9.
@@ -39,5 +39,5 @@ to run the compilation file. This should create 5 executables and 4 libraries in
 
 ## python
 
-In addition to command line programs, we also provide wrappers for our code that allow them to be used with python once the relevant libraries are [compiled](## Compiling). This eases the need to save output from the executables to disk and then read them from disk; we directly copy from managed memory to a numpy array once magnification maps and other objects are created.
+In addition to command line programs, we also provide wrappers for our code that allow them to be used with python once the relevant libraries are [compiled](##compiling). This eases the need to save output from the executables to disk and then read them from disk; we directly copy from managed memory to a numpy array once magnification maps and other objects are created.
 
