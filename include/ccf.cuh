@@ -62,15 +62,6 @@ public:
 	std::string outfile_prefix = "./";
 
 
-	/******************************************************************************
-	class initializer is empty
-	******************************************************************************/
-	CCF()
-	{
-
-	}
-
-
 private:
 	/******************************************************************************
 	constant variables
@@ -189,7 +180,8 @@ private:
 		return true;
 	}
 
-	bool clear_memory(int verbose)
+	//optional return or not, so memory can be cleared in destructor without error checking
+	bool clear_memory(int verbose, bool return_on_error = true)
 	{
 		print_verbose("Clearing memory...\n", verbose, 3);
 		
@@ -198,53 +190,53 @@ private:
 		******************************************************************************/
 
 		cudaFree(states);
-		if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
 		states = nullptr;
 		
 		cudaFree(stars);
-		if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
 		stars = nullptr;
 		
 		cudaFree(temp_stars);
-		if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
 		temp_stars = nullptr;
 		
 		cudaFree(binomial_coeffs);
-		if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
 		binomial_coeffs = nullptr;
 		
 		cudaFree(ccs_init);
-		if (cuda_error("cudaFree(*ccs_init)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*ccs_init)", false, __FILE__, __LINE__)) return false;
 		ccs_init = nullptr;
 		
 		cudaFree(ccs);
-		if (cuda_error("cudaFree(*ccs)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*ccs)", false, __FILE__, __LINE__)) return false;
 		ccs = nullptr;
 		
 		cudaFree(fin);
-		if (cuda_error("cudaFree(*fin)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*fin)", false, __FILE__, __LINE__)) return false;
 		fin = nullptr;
 		
 		cudaFree(errs);
-		if (cuda_error("cudaFree(*errs)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*errs)", false, __FILE__, __LINE__)) return false;
 		errs = nullptr;
 		
 		cudaFree(has_nan);
-		if (cuda_error("cudaFree(*has_nan)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*has_nan)", false, __FILE__, __LINE__)) return false;
 		has_nan = nullptr;
 		
 		cudaFree(caustics);
-		if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
 		caustics = nullptr;
 		
 		cudaFree(mu_length_scales);
-		if (cuda_error("cudaFree(*mu_length_scales)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*mu_length_scales)", false, __FILE__, __LINE__)) return false;
 		mu_length_scales = nullptr;
 
 		for	(int i = 0; i < tree.size(); i++) //for every level in the tree, free the memory for the nodes
 		{
 			cudaFree(tree[i]);
-			if (cuda_error("cudaFree(*tree[i])", false, __FILE__, __LINE__)) return false;
+			if (return_on_error && cuda_error("cudaFree(*tree[i])", false, __FILE__, __LINE__)) return false;
 			tree[i] = nullptr;
 		}
 
@@ -1312,6 +1304,70 @@ private:
 
 
 public:
+
+	/******************************************************************************
+	class initializer is empty
+	******************************************************************************/
+	CCF()
+	{
+
+	}
+
+	/******************************************************************************
+	class destructor clears memory with no output or error checking
+	******************************************************************************/
+	~CCF()
+	{
+		clear_memory(0, false);
+	}
+
+	/******************************************************************************
+	copy constructor sets this object's dynamic memory pointers to null
+	******************************************************************************/
+	CCF(const CCF& other)
+	{
+		states = nullptr;
+		stars = nullptr;
+		temp_stars = nullptr;
+
+		binomial_coeffs = nullptr;
+
+		ccs_init = nullptr;
+		ccs = nullptr;
+		fin = nullptr;
+		errs = nullptr;
+		has_nan = nullptr;
+		caustics = nullptr;
+		mu_length_scales = nullptr;
+
+		tree = {};
+	}
+
+	/******************************************************************************
+	copy assignment sets this object's dynamic memory pointers to null
+	******************************************************************************/
+	CCF& operator=(const CCF& other)
+	{
+        if (this == &other) return *this;
+
+		states = nullptr;
+		stars = nullptr;
+		temp_stars = nullptr;
+
+		binomial_coeffs = nullptr;
+
+		ccs_init = nullptr;
+		ccs = nullptr;
+		fin = nullptr;
+		errs = nullptr;
+		has_nan = nullptr;
+		caustics = nullptr;
+		mu_length_scales = nullptr;
+
+		tree = {};
+
+		return *this;
+	}
 
 	bool run(int verbose)
 	{

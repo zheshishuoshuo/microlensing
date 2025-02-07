@@ -40,7 +40,7 @@ class CCF(object):
         '''
         self.lib = lib_ccf.lib
 
-        self.obj = self.lib.init()
+        self.obj = self.lib.CCF_init()
         self.verbose = verbose
 
         self.kappa_tot = kappa_tot
@@ -79,6 +79,9 @@ class CCF(object):
         self.write_mu_length_scales = write_length_scales
         
         self.outfile_prefix = outfile_prefix
+
+    def __del__(self):
+        self.lib.CCF_delete(self.obj)
         
     @property
     def kappa_tot(self):

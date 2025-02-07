@@ -35,15 +35,6 @@ public:
 	std::string outfile_prefix = "./";
 
 
-	/******************************************************************************
-	class initializer is empty
-	******************************************************************************/
-	NCC()
-	{
-
-	}
-
-
 private:
 	/******************************************************************************
 	constant variables
@@ -130,7 +121,8 @@ private:
 		return true;
 	}
 
-	bool clear_memory(int verbose)
+	//optional return or not, so memory can be cleared in destructor without error checking
+	bool clear_memory(int verbose, bool return_on_error = true)
 	{
 		print_verbose("Clearing memory...\n", verbose, 3);
 		
@@ -139,15 +131,15 @@ private:
 		******************************************************************************/
 
 		cudaFree(caustics);
-		if (cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*caustics)", false, __FILE__, __LINE__)) return false;
 		caustics = nullptr;
 		
 		cudaFree(num_crossings);
-		if (cuda_error("cudaFree(*num_crossings)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*num_crossings)", false, __FILE__, __LINE__)) return false;
 		num_crossings = nullptr;
 		
 		cudaFree(histogram);
-		if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
 		histogram = nullptr;
 
 		print_verbose("Done clearing memory.\n\n", verbose, 3);
@@ -450,6 +442,48 @@ private:
 
 
 public:
+
+	/******************************************************************************
+	class initializer is empty
+	******************************************************************************/
+	NCC()
+	{
+
+	}
+
+	/******************************************************************************
+	class destructor clears memory with no output or error checking
+	******************************************************************************/
+	~NCC()
+	{
+		clear_memory(0, false);
+	}
+
+	/******************************************************************************
+	copy constructor sets this object's dynamic memory pointers to null
+	******************************************************************************/
+	NCC(const NCC& other)
+	{
+		caustics = nullptr;
+		num_crossings = nullptr;
+
+		histogram = nullptr;
+	}
+
+	/******************************************************************************
+	copy assignment sets this object's dynamic memory pointers to null
+	******************************************************************************/
+	NCC& operator=(const NCC& other)
+	{
+        if (this == &other) return *this;
+
+		caustics = nullptr;
+		num_crossings = nullptr;
+
+		histogram = nullptr;
+
+		return *this;
+	}
 
 	bool run(int verbose)
 	{

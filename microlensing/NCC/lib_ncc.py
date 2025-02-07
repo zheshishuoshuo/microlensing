@@ -4,8 +4,8 @@ import ctypes
 
 lib = ctypes.CDLL(f'{os.path.dirname(os.path.abspath(__file__))}/../../bin/lib_ncc.so')
 
-lib.init.argtypes = []
-lib.init.restype = ctypes.c_void_p
+lib.NCC_init.argtypes = []
+lib.NCC_init.restype = ctypes.c_void_p
 
 lib.set_infile_prefix.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
 lib.set_infile_prefix.restype = ctypes.c_void_p
@@ -60,3 +60,6 @@ lib.run.argtypes = [ctypes.c_void_p, ctypes.c_int]
 lib.run.restype = ctypes.c_bool
 lib.save.argtypes = [ctypes.c_void_p, ctypes.c_int]
 lib.save.restype = ctypes.c_bool
+
+lib.NCC_delete.argtypes = [ctypes.c_void_p]
+lib.NCC_delete.restype = None

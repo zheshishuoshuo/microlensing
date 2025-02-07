@@ -12,7 +12,7 @@ using dtype = double; //type to be used throughout this program. float or double
 extern "C" 
 {
     
-    CCF<dtype>* init()                                          {return new CCF<dtype>();}
+    CCF<dtype>* CCF_init()                                      {return new CCF<dtype>();}
 
     void set_kappa_tot(CCF<dtype> *self, dtype val)             {self->kappa_tot                = val;}
     void set_shear(CCF<dtype> *self, dtype val)                 {self->shear                    = val;}
@@ -69,5 +69,7 @@ extern "C"
 
     bool run(CCF<dtype> *self, int verbose)                     {return self->run(verbose);}
     bool save(CCF<dtype> *self, int verbose)                    {return self->save(verbose);}
+
+    void CCF_delete(CCF<dtype> *self)                           {delete self;}
 
 }

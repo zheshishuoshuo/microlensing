@@ -12,7 +12,7 @@ using dtype = double; //type to be used throughout this program. float or double
 extern "C" 
 {
     
-    NCC<dtype>* init()                                          {return new NCC<dtype>();}
+    NCC<dtype>* NCC_init()                                      {return new NCC<dtype>();}
 
     void set_infile_prefix(NCC<dtype> *self, const char* val)   {self->infile_prefix        = val;}
     void set_center_y1(NCC<dtype> *self, dtype val)             {self->center_y.re          = val;}
@@ -42,5 +42,7 @@ extern "C"
     
     bool run(NCC<dtype> *self, int verbose)                     {return self->run(verbose);}
     bool save(NCC<dtype> *self, int verbose)                    {return self->save(verbose);}
+
+    void NCC_delete(NCC<dtype> *self)                           {delete self;}
 
 }

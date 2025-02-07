@@ -12,7 +12,7 @@ using dtype = double; //type to be used throughout this program. float or double
 extern "C" 
 {
     
-    IPM<dtype>* init()                                          {return new IPM<dtype>();}
+    IPM<dtype>* IPM_init()                                      {return new IPM<dtype>();}
 
     void set_kappa_tot(IPM<dtype> *self, dtype val)             {self->kappa_tot            = val;}
     void set_shear(IPM<dtype> *self, dtype val)                 {self->shear                = val;}
@@ -79,5 +79,7 @@ extern "C"
 
     bool run(IPM<dtype> *self, int verbose)                     {return self->run(verbose);}
     bool save(IPM<dtype> *self, int verbose)                    {return self->save(verbose);}
+
+    void IPM_delete(IPM<dtype> *self)                           {delete self;}
 
 }

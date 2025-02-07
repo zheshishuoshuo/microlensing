@@ -52,7 +52,7 @@ class IPM(object):
         else:
             self.lib = lib_ipm.lib
 
-        self.obj = self.lib.init()
+        self.obj = self.lib.IPM_init()
         self.verbose = verbose
 
         self.kappa_tot = kappa_tot
@@ -93,6 +93,9 @@ class IPM(object):
         self.write_histograms = write_histograms
         
         self.outfile_prefix = outfile_prefix
+
+    def __del__(self):
+        self.lib.IPM_delete(self.obj)
         
     @property
     def kappa_tot(self):

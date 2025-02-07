@@ -28,7 +28,7 @@ class NCC(object):
         '''
         self.lib = lib_ncc.lib
 
-        self.obj = self.lib.init()
+        self.obj = self.lib.NCC_init()
         self.verbose = verbose
 
         self.infile_prefix = infile_prefix
@@ -46,6 +46,9 @@ class NCC(object):
         self.write_histograms = write_histograms
         
         self.outfile_prefix = outfile_prefix
+
+    def __del__(self):
+        self.lib.NCC_delete(self.obj)
 
     @property
     def infile_prefix(self):

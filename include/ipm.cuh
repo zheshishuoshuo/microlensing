@@ -64,15 +64,6 @@ public:
 	std::string outfile_prefix = "./";
 
 
-	/******************************************************************************
-	class initializer is empty
-	******************************************************************************/
-	IPM()
-	{
-
-	}
-
-
 private:
 	/******************************************************************************
 	constant variables
@@ -202,7 +193,8 @@ private:
 		return true;
 	}
 
-	bool clear_memory(int verbose)
+	//optional return or not, so memory can be cleared in destructor without error checking
+	bool clear_memory(int verbose, bool return_on_error = true)
 	{
 		print_verbose("Clearing memory...\n", verbose, 3);
 		
@@ -211,61 +203,61 @@ private:
 		******************************************************************************/
 
 		cudaFree(states);
-		if (cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*states)", false, __FILE__, __LINE__)) return false;
 		states = nullptr;
 		
 		cudaFree(stars);
-		if (cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*stars)", false, __FILE__, __LINE__)) return false;
 		stars = nullptr;
 		
 		cudaFree(temp_stars);
-		if (cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*temp_stars)", false, __FILE__, __LINE__)) return false;
 		temp_stars = nullptr;
 		
 		cudaFree(binomial_coeffs);
-		if (cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*binomial_coeffs)", false, __FILE__, __LINE__)) return false;
 		binomial_coeffs = nullptr;
 		
 		cudaFree(pixels);
-		if (cuda_error("cudaFree(*pixels)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*pixels)", false, __FILE__, __LINE__)) return false;
 		pixels = nullptr;
 		
 		cudaFree(pixels_minima);
-		if (cuda_error("cudaFree(*pixels_minima)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*pixels_minima)", false, __FILE__, __LINE__)) return false;
 		pixels_minima = nullptr;
 		
 		cudaFree(pixels_saddles);
-		if (cuda_error("cudaFree(*pixels_saddles)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*pixels_saddles)", false, __FILE__, __LINE__)) return false;
 		pixels_saddles = nullptr;
 		
 		cudaFree(histogram);
-		if (cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*histogram)", false, __FILE__, __LINE__)) return false;
 		histogram = nullptr;
 		
 		cudaFree(histogram_minima);
-		if (cuda_error("cudaFree(*histogram_minima)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*histogram_minima)", false, __FILE__, __LINE__)) return false;
 		histogram_minima = nullptr;
 		
 		cudaFree(histogram_saddles);
-		if (cuda_error("cudaFree(*histogram_saddles)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*histogram_saddles)", false, __FILE__, __LINE__)) return false;
 		histogram_saddles = nullptr;
 		
 		cudaFree(log_histogram);
-		if (cuda_error("cudaFree(*log_histogram)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*log_histogram)", false, __FILE__, __LINE__)) return false;
 		log_histogram = nullptr;
 		
 		cudaFree(log_histogram_minima);
-		if (cuda_error("cudaFree(*log_histogram_minima)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*log_histogram_minima)", false, __FILE__, __LINE__)) return false;
 		log_histogram_minima = nullptr;
 		
 		cudaFree(log_histogram_saddles);
-		if (cuda_error("cudaFree(*log_histogram_saddles)", false, __FILE__, __LINE__)) return false;
+		if (return_on_error && cuda_error("cudaFree(*log_histogram_saddles)", false, __FILE__, __LINE__)) return false;
 		log_histogram_saddles = nullptr;
 
 		for	(int i = 0; i < tree.size(); i++) //for every level in the tree, free the memory for the nodes
 		{
 			cudaFree(tree[i]);
-			if (cuda_error("cudaFree(*tree[i])", false, __FILE__, __LINE__)) return false;
+			if (return_on_error && cuda_error("cudaFree(*tree[i])", false, __FILE__, __LINE__)) return false;
 			tree[i] = nullptr;
 		}
 
@@ -1384,6 +1376,78 @@ private:
 
 
 public:
+
+	/******************************************************************************
+	class initializer is empty
+	******************************************************************************/
+	IPM()
+	{
+
+	}
+
+	/******************************************************************************
+	class destructor clears memory with no output or error checking
+	******************************************************************************/
+	~IPM()
+	{
+		clear_memory(0, false);
+	}
+
+	/******************************************************************************
+	copy constructor sets this object's dynamic memory pointers to null
+	******************************************************************************/
+	IPM(const IPM& other)
+	{
+		states = nullptr;
+		stars = nullptr;
+		temp_stars = nullptr;
+
+		binomial_coeffs = nullptr;
+
+		pixels = nullptr;
+		pixels_minima = nullptr;
+		pixels_saddles = nullptr;
+
+		histogram = nullptr;
+		histogram_minima = nullptr;
+		histogram_saddles = nullptr;
+
+		log_histogram = nullptr;
+		log_histogram_minima = nullptr;
+		log_histogram_saddles = nullptr;
+
+		tree = {};
+	}
+
+	/******************************************************************************
+	copy assignment sets this object's dynamic memory pointers to null
+	******************************************************************************/
+	IPM& operator=(const IPM& other)
+	{
+        if (this == &other) return *this;
+		
+		states = nullptr;
+		stars = nullptr;
+		temp_stars = nullptr;
+
+		binomial_coeffs = nullptr;
+
+		pixels = nullptr;
+		pixels_minima = nullptr;
+		pixels_saddles = nullptr;
+
+		histogram = nullptr;
+		histogram_minima = nullptr;
+		histogram_saddles = nullptr;
+
+		log_histogram = nullptr;
+		log_histogram_minima = nullptr;
+		log_histogram_saddles = nullptr;
+
+		tree = {};
+
+		return *this;
+	}
 
 	bool run(int verbose)
 	{
