@@ -12,7 +12,7 @@ We utilize Inverse Polygon Mapping (IPM, Mediavilla et al. [2006](https://ui.ads
 
 We utilize Witt's ([1990](https://ui.adsabs.harvard.edu/abs/1990A&A...236..311W)) method to locate the microlensing critical curves and caustics, while taking advantage of the FMM again to decrease computation time for terms involving derivatives of the microlensing potential. In order to locate the roots of the parametric critical curve equation, we employ the [Aberth](https://doi.org/10.2307/2005621)-[Ehrlich](https://doi.org/10.1145/363067.363115) method, a cubically convergent algorithm that allows for simultaneous approximations of the roots of a polynomial. 
 
-We use the fact that the caustics are clockwise oriented closed curves (under our chosen critical curve parametrization) to utilize the winding number in order to calculate the two dimensional map of the the number of caustic crossings (Wambsganss et al. [1992](https://ui.adsabs.harvard.edu/abs/1992A&A...258..591), Granot et al. [2003](https://ui.adsabs.harvard.edu/abs/2003ApJ...583..575G)). 
+We use the fact that the caustics are clockwise (under our chosen critical curve parametrization) oriented closed curves to utilize the winding number in order to calculate the two dimensional map of the the number of caustic crossings (Wambsganss et al. [1992](https://ui.adsabs.harvard.edu/abs/1992A&A...258..591), Granot et al. [2003](https://ui.adsabs.harvard.edu/abs/2003ApJ...583..575G)). 
 
 
 ## Dependencies
