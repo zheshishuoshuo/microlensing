@@ -205,7 +205,7 @@ class NCC(object):
                   (self.center[1] + self.half_length[1])]
 
         img = ax.imshow(self.num_caustic_crossings, extent=extent, **kwargs)
-        ax.get_figure().colorbar(img, label='$N_{\\text{microminima}}$')
+        ax.get_figure().colorbar(img, label='$N_{\\text{caustic crossings}}$')
 
         ax.set_xlabel('$y_1$')
         ax.set_ylabel('$y_2$')
@@ -219,5 +219,5 @@ class NCC(object):
 
         ax.hist(self.magnitudes.ravel(), bins=bins, density=True, **kwargs)
 
-        ax.set_xlabel('$N_{\\text{microminima}}$')
-        ax.set_ylabel('p($N_{\\text{microminima}}$)')
+        ax.set_xlabel('$N_{\\text{caustic crossings}}$')
+        ax.set_ylabel('p($N_{\\text{caustic crossings}}$)')
