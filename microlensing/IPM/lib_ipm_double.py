@@ -4,8 +4,8 @@ import ctypes
 
 lib = ctypes.CDLL(f'{os.path.dirname(os.path.abspath(__file__))}/../../bin/lib_ipm_double.so')
 
-lib.init.argtypes = []
-lib.init.restype = ctypes.c_void_p
+lib.IPM_init.argtypes = []
+lib.IPM_init.restype = ctypes.c_void_p
 
 lib.set_kappa_tot.argtypes = [ctypes.c_void_p, ctypes.c_double]
 lib.set_kappa_tot.restype = ctypes.c_void_p
@@ -132,3 +132,6 @@ lib.run.argtypes = [ctypes.c_void_p, ctypes.c_int]
 lib.run.restype = ctypes.c_bool
 lib.save.argtypes = [ctypes.c_void_p, ctypes.c_int]
 lib.save.restype = ctypes.c_bool
+
+lib.IPM_delete.argtypes = [ctypes.c_void_p]
+lib.IPM_delete.restype = None
