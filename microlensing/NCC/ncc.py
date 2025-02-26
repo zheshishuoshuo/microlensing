@@ -57,7 +57,7 @@ class NCC(object):
     @infile_prefix.setter
     def infile_prefix(self, value):
         if value is not None:
-            self.lib.set_infile_prefix(self.obj, value.lower().encode('utf-8'))
+            self.lib.set_infile_prefix(self.obj, value.encode('utf-8'))
 
     @property
     def center_y1(self):
