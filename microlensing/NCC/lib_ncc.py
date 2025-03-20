@@ -1,8 +1,12 @@
-import os
+from sys import platform
 import ctypes
+from importlib.resources import files
 
 
-lib = ctypes.CDLL(f'{os.path.dirname(os.path.abspath(__file__))}/../../bin/lib_ncc.so')
+if platform == 'linux':
+    lib = ctypes.CDLL(files('microlensing.lib').joinpath('lib_ncc.so'))
+else:
+    raise FileNotFoundError("NCC library for non-Linux platforms not yet available")
 
 lib.NCC_init.argtypes = []
 lib.NCC_init.restype = ctypes.c_void_p
