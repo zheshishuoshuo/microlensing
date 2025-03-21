@@ -22,7 +22,6 @@ setup(
     url="https://github.com/weisluke/microlensing/",
     packages=find_namespace_packages(),
     license="GNU AFFERO GENERAL PUBLIC LICENSE",
-    license_files=['LICENSE.txt'],
     platforms=['linux_x86_64'],
     package_data={"microlensing.lib": ["*.so"]},
     install_requires=['numpy', 'scipy', 'astropy', 'matplotlib', 'sncosmo']
