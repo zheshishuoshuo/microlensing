@@ -8,12 +8,14 @@ long_description = '''This package provides code for
 
 all on GPUs. It relies on python wrappers around C++/CUDA libraries which have
 been precompiled and included with this package for linux_x86_64 architectures.
-Compilation used the GNU compiler v12.2.0 and the CUDA HPC SDK v23.9.
+Compilation used the GNU compiler v11.2.0 and the CUDA compiler v12.4. They 
+*should* work for Linux distributions that have GLIBC >= 2.31 and 
+GLIBCXX >= 3.4.29, but no promises.
 Further details can be found at https://github.com/weisluke/microlensing'''
 
 setup(
     name='microlensing',
-    version='0.1.0',
+    version='0.1.1',
     description='A package for microlensing simulations',
     long_description=long_description,
     long_description_content_type='text/markdown',
