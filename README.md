@@ -31,7 +31,7 @@ The bulk of the code is written using NVIDIA's CUDA, and you will need a CUDA in
 The `include` directory contains the bulk of the code, which is written mostly as templated objects and functions. The `src` directory contains files for creating executables and libraries. The `bin` directory holds [compilation](#compiling) output. The `microlensing` directory contains [python](#python) code for ease of use, while the root directory contains a couple example python notebooks outlining usage.
 
 ## Compiling
-Compilation has been tested with the GNU compiler version 12.2.0 and the CUDA HPC SDK version 23.9.
+Compilation has been tested with the GNU compiler version 11.2.0 and the CUDA compiler version 12.4.
 
 First, clone the repository.
 ```
@@ -44,7 +44,7 @@ source compile
 ```
 to run the compilation file. This should create 5 executables and 4 libraries in the `bin` directory. 
 
-I'll note that this repository contains the 4 libraries precompiled and placed in the `./microlensing/lib/` directory already. These libraries may or may not work on your hardware, as they were compiled for a particular cluster, but you can try running the example [python](#python) notebook first to see if they do. If there are errors, you will need to compile everything yourself.
+I'll note that this repository contains the 4 libraries precompiled and placed in the `./microlensing/lib/` directory already. These libraries may or may not work on your hardware, as they were compiled for a particular cluster (NERSC), but you can try running the example [python](#python) notebook first to see if they do. They *should* work for Linux distributions that have GLIBC >= 2.31, and GLIBCXX >= 3.4.29, but no promises. If there are errors, you will need to compile everything yourself.
 
 ## python
 
