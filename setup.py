@@ -15,7 +15,7 @@ Further details can be found at https://github.com/weisluke/microlensing'''
 
 setup(
     name='microlensing',
-    version='0.1.1',
+    version='0.1.2',
     description='A package for microlensing simulations',
     long_description=long_description,
     long_description_content_type='text/markdown',
