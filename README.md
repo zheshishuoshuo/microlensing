@@ -44,7 +44,7 @@ source compile
 ```
 to run the compilation file. This should create 5 executables and 4 libraries in the `bin` directory. 
 
-I'll note that this repository contains the 4 libraries precompiled and placed in the `./microlensing/lib/` directory already. These libraries may or may not work on your hardware, as they were compiled for a particular cluster (NERSC), but you can try running the example [python](#python) notebook first to see if they do. They *should* work for Linux distributions that have GLIBC >= 2.31, and GLIBCXX >= 3.4.29, but no promises. If there are errors, you will need to compile everything yourself.
+I'll note that this repository contains the 4 libraries precompiled and placed in the `./microlensing/lib/` directory already. These libraries may or may not work on your hardware, as they were compiled for a particular cluster (NERSC), but you can try running the example [python](#python) notebook first to see if they do. They *should* work for Linux distributions that have GLIBC >= 2.31 and GLIBCXX >= 3.4.29, but no promises. If there are errors, you will need to compile everything yourself.
 
 ## python
 
