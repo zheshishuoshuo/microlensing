@@ -49,13 +49,13 @@ def read_stars(fname: str, dtype=np.float32):
     return stars, rectangular, corner, theta_star
 
 
-def write_stars(fname: str, nstars: int, rectangular: bool, corner,
-                theta_star: float, stars, dtype=np.float32):
+def write_stars(fname: str, stars, rectangular: bool, corner,
+                theta_star: float, dtype=np.float32):
     '''
     Write a binary file of star information
 
     :param fname: name of the file to write
-    :param nstars: number of stars
+    :param stars: array of stars in the form (x1, x2, mass)
     :param rectangular: bool of whether the star field is rectangular or
                         circular
     :param corner: array of 2 numbers representing the (x1, x2) corner of the
@@ -63,11 +63,15 @@ def write_stars(fname: str, nstars: int, rectangular: bool, corner,
                    if the star field is circular, this should be (rad, 0)
     :param theta_star: Einstein radius of a unit mass point lens in arbitrary
                        units. typically 1
-    :param stars: array of length nstars in the form (x1, x2, mass)
     :param dtype: data type for the file. default is np.float32
     '''
     if not fname.endswith('.bin'):
         raise ValueError('fname must be a .bin file')
+    
+    if not isinstance(stars, np.ndarray):
+        stars = np.array(stars)
+    if stars.ndim != 2:
+        raise ValueError("stars is not a 2D array")
     
     if dtype == np.float64:
         dtype = 'd'
@@ -82,7 +86,7 @@ def write_stars(fname: str, nstars: int, rectangular: bool, corner,
         rectangular = 0
 
     with open(fname, 'wb') as f:
-        s = struct.pack('i', nstars)
+        s = struct.pack('i', stars.shape[0])
         f.write(s)
         s = struct.pack('i', rectangular)
         f.write(s)

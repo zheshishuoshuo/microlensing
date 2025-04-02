@@ -3,24 +3,24 @@ import numpy as np
 
 class Stars():
 
-    def __init__(self, rectangular: bool, corner, theta_star, stars):
+    def __init__(self, stars, rectangular: bool, corner, theta_star: float):
         '''
-        :param rectangular: whether star field is rectangualr or circular
-        :param corner: corner of the star field, assuming it is centered at (0,0)
-        :param theta_star: Einstein radius of a unit mass point lens
         :param stars: array of star positions and masses (x1, x2, m)
+        :param rectangular: whether star field is rectangular or circular
+        :param corner: (x1, x2) corner of the star field, assuming it is centered at (0,0)
+        :param theta_star: Einstein radius of a unit mass point lens
         '''
+
+        if not isinstance(stars, np.ndarray):
+            self.stars = np.array(stars)
+        else:
+            self.stars = stars
 
         self.rectangular = rectangular
 
         self.corner = tuple(corner)
 
         self.theta_star = theta_star
-
-        if not isinstance(stars, np.ndarray):
-            self.stars = np.array(stars)
-        else:
-            self.stars = stars
 
     @property
     def num_stars(self):

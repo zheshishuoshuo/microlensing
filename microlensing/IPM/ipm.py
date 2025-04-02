@@ -418,9 +418,9 @@ class IPM(object):
             self.magnifications_minima = None
             self.magnifications_saddles = None
 
-        self.stars = Stars(self.rectangular, self.corner, self.theta_star,
-                           np.ctypeslib.as_array(self.lib.get_stars(self.obj),
-                                                 shape=(self.num_stars, 3)).copy())
+        self.stars = Stars(np.ctypeslib.as_array(self.lib.get_stars(self.obj),
+                                                 shape=(self.num_stars, 3)).copy(),
+                           self.rectangular, self.corner, self.theta_star)
         
         return MagMap(self.magnifications, self.center, self.half_length, 
                       self.kappa_tot, self.shear, self.kappa_star, self.stars)
