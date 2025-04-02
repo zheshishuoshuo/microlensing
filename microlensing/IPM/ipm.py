@@ -469,8 +469,6 @@ class IPM(object):
         ax.set_xlabel('$y_1 / \\theta_★$')
         ax.set_ylabel('$y_2 / \\theta_★$')
 
-        ax.set_aspect(self.half_length[0] / self.half_length[1])
-
     def plot_hist(self, ax: matplotlib.axes.Axes, bins=None, **kwargs):
         if bins is None:
             vmin, vmax = (np.min(self.magnitudes), np.max(self.magnitudes))

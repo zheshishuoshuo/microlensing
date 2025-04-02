@@ -146,7 +146,7 @@ class NCC(object):
     def over_sample(self, value):
         if value is not None:
             if value < 0:
-                raise ValueError("num_rays_y must be >= 0")
+                raise ValueError("over_sample must be >= 0")
             self.lib.set_over_sample(self.obj, value)
 
     @property
@@ -205,19 +205,20 @@ class NCC(object):
                   (self.center[1] + self.half_length[1])]
 
         img = ax.imshow(self.num_caustic_crossings, extent=extent, **kwargs)
-        ax.get_figure().colorbar(img, label='$N_{\\text{caustic crossings}}$')
+        cbar = ax.get_figure().colorbar(img, label='$N_{\\text{caustic crossings}}$')
+        # make sure ticks are only at integers
+        cbar.set_ticks([what for what in cbar.get_ticks() if what == int(what)])
 
         ax.set_xlabel('$y_1$')
         ax.set_ylabel('$y_2$')
 
-        ax.set_aspect(self.half_length[0] / self.half_length[1])
-
     def plot_hist(self, ax: matplotlib.axes.Axes, bins=None, **kwargs):
         if bins is None:
-            vmin, vmax = (np.min(self.magnitudes) - 0.5, np.max(self.magnitudes) + 0.5)
+            vmin, vmax = (np.min(self.num_caustic_crossings) - 0.5, 
+                          np.max(self.num_caustic_crossings) + 1 + 0.5)
             bins = np.arange(vmin, vmax, 1)
 
-        ax.hist(self.magnitudes.ravel(), bins=bins, density=True, **kwargs)
+        ax.hist(self.num_caustic_crossings.ravel(), bins=bins, density=True, **kwargs)
 
         ax.set_xlabel('$N_{\\text{caustic crossings}}$')
         ax.set_ylabel('p($N_{\\text{caustic crossings}}$)')
