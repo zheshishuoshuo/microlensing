@@ -207,7 +207,8 @@ class NCC(object):
         img = ax.imshow(self.num_caustic_crossings, extent=extent, **kwargs)
         cbar = ax.get_figure().colorbar(img, label='$N_{\\text{caustic crossings}}$')
         # make sure ticks are only at integers
-        cbar.set_ticks([what for what in cbar.get_ticks() if what == int(what)])
+        cbar.set_ticks([what for what in cbar.get_ticks() 
+                        if what == int(what) and what > kwargs['vmin'] and what < kwargs['vmax']])
 
         ax.set_xlabel('$y_1$')
         ax.set_ylabel('$y_2$')
