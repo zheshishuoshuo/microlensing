@@ -93,7 +93,7 @@ lib.get_write_critical_curves.restype = ctypes.c_int
 lib.get_write_caustics.argtypes = [ctypes.c_void_p]
 lib.get_write_caustics.restype = ctypes.c_int
 lib.get_write_mu_length_scales.argtypes = [ctypes.c_void_p]
-lib.get_write_mu_length_scales.restype = ctypes.c_char_p
+lib.get_write_mu_length_scales.restype = ctypes.c_int
 lib.get_outfile_prefix.argtypes = [ctypes.c_void_p]
 lib.get_outfile_prefix.restype = ctypes.c_char_p
 
