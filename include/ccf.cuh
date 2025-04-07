@@ -608,19 +608,11 @@ private:
 		number of branches, because we will be growing roots for two values of phi
 		simultaneously for each branch
 		******************************************************************************/
-		set_threads(threads, 512);
-		set_blocks(threads, blocks, (num_phi + num_branches) * num_roots);
-		
 		print_verbose("Initializing array values...\n", verbose, 3);
 		stopwatch.start();
 
-		for (int i = 0; i < num_branches * 2 * num_roots; i++)
-		{
-			fin[i] = false;
-		}
-
-		initialize_array_kernel<T> <<<blocks, threads>>> (errs, (num_phi + num_branches) * num_roots, 1);
-		if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
+		thrust::fill(thrust::device, fin, fin + num_branches * 2 * num_roots, false);
+		thrust::fill(thrust::device, errs, errs + (num_phi + num_branches) * num_roots, 0);
 
 		t_elapsed = stopwatch.stop();
 		print_verbose("Done initializing array values. Elapsed time: " << t_elapsed << " seconds.\n\n", verbose, 3);

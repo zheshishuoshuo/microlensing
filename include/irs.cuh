@@ -626,20 +626,14 @@ private:
 		/******************************************************************************
 		initialize pixel values
 		******************************************************************************/
-		set_threads(threads, 16, 16);
-		set_blocks(threads, blocks, num_pixels_y.re, num_pixels_y.im);
-
 		print_verbose("Initializing array values...\n", verbose, 3);
 		stopwatch.start();
 
-		initialize_array_kernel<int> <<<blocks, threads>>> (pixels, num_pixels_y.im, num_pixels_y.re);
-		if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
+		thrust::fill(thrust::device, pixels, pixels + num_pixels_y.re * num_pixels_y.im, 0);
 		if (write_parities)
 		{
-			initialize_array_kernel<int> <<<blocks, threads>>> (pixels_minima, num_pixels_y.im, num_pixels_y.re);
-			if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
-			initialize_array_kernel<int> <<<blocks, threads>>> (pixels_saddles, num_pixels_y.im, num_pixels_y.re);
-			if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
+			thrust::fill(thrust::device, pixels_minima, pixels_minima + num_pixels_y.re * num_pixels_y.im, 0);
+			thrust::fill(thrust::device, pixels_saddles, pixels_saddles + num_pixels_y.re * num_pixels_y.im, 0);
 		}
 
 		t_elapsed = stopwatch.stop();
@@ -1045,17 +1039,11 @@ private:
 			}
 
 			
-			set_threads(threads, 512);
-			set_blocks(threads, blocks, histogram_length);
-
-			initialize_array_kernel<int> <<<blocks, threads>>> (histogram, 1, histogram_length);
-			if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
+			thrust::fill(thrust::device, histogram, histogram + histogram_length, 0);
 			if (write_parities)
 			{
-				initialize_array_kernel<int> <<<blocks, threads>>> (histogram_minima, 1, histogram_length);
-				if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
-				initialize_array_kernel<int> <<<blocks, threads>>> (histogram_saddles, 1, histogram_length);
-				if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
+				thrust::fill(thrust::device, histogram_minima, histogram_minima + histogram_length, 0);
+				thrust::fill(thrust::device, histogram_saddles, histogram_saddles + histogram_length, 0);
 			}
 
 			

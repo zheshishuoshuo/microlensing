@@ -244,14 +244,10 @@ private:
 		/******************************************************************************
 		initialize pixel values
 		******************************************************************************/
-		set_threads(threads, 16, 16);
-		set_blocks(threads, blocks, num_pixels_y.re, num_pixels_y.im);
-
 		print_verbose("Initializing array values...\n", verbose, 3);
 		stopwatch.start();
 
-		initialize_array_kernel<int> <<<blocks, threads>>> (num_crossings, num_pixels_y.im, num_pixels_y.re);
-		if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
+		thrust::fill(thrust::device, num_crossings, num_crossings + num_pixels_y.re * num_pixels_y.im, 0);
 
 		t_elapsed = stopwatch.stop();
 		print_verbose("Done initializing array values. Elapsed time: " << t_elapsed << " seconds.\n\n", verbose, 3);
@@ -350,11 +346,7 @@ private:
 			cudaMallocManaged(&histogram, histogram_length * sizeof(int));
 			if (cuda_error("cudaMallocManaged(*histogram)", false, __FILE__, __LINE__)) return false;
 
-			set_threads(threads, 512);
-			set_blocks(threads, blocks, histogram_length);
-
-			initialize_array_kernel<int> <<<blocks, threads>>> (histogram, 1, histogram_length);
-			if (cuda_error("initialize_array_kernel", true, __FILE__, __LINE__)) return false;
+			thrust::fill(thrust::device, histogram, histogram + histogram_length, 0);
 
 			set_threads(threads, 16, 16);
 			set_blocks(threads, blocks, num_pixels_y.re, num_pixels_y.im);

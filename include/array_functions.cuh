@@ -10,31 +10,6 @@
 
 
 /******************************************************************************
-initialize array of values to 0
-
-\param vals -- pointer to array of values
-\param nrows -- number of rows in array
-\param ncols -- number of columns in array
-******************************************************************************/
-template <typename T>
-__global__ void initialize_array_kernel(T* vals, int nrows, int ncols)
-{
-	int x_index = blockIdx.x * blockDim.x + threadIdx.x;
-	int x_stride = blockDim.x * gridDim.x;
-
-	int y_index = blockIdx.y * blockDim.y + threadIdx.y;
-	int y_stride = blockDim.y * gridDim.y;
-
-	for (int i = x_index; i < ncols; i += x_stride)
-	{
-		for (int j = y_index; j < nrows; j += y_stride)
-		{
-			vals[j * ncols + i] = 0;
-		}
-	}
-}
-
-/******************************************************************************
 transpose array
 
 \param z1 -- pointer to array of values
