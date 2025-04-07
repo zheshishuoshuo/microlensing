@@ -8,7 +8,7 @@
 
 #include <thrust/execution_policy.h> //for thrust::device
 #include <thrust/extrema.h> // for thrust::min_element, thrust::max_element
-#include <thrust/reduce.h> // for thrust::reduce
+#include <thrust/fill.h> // for thrust::fill
 
 #include <chrono> //for setting random seed with clock
 #include <fstream> //for writing files

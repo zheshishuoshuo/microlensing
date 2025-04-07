@@ -18,6 +18,7 @@
 #include <curand_kernel.h>
 #include <thrust/execution_policy.h> //for thrust::device
 #include <thrust/extrema.h> //for thrust::max_element
+#include <thrust/fill.h> // for thrust::fill
 
 #include <algorithm> //for std::min and std::max
 #include <chrono> //for setting random seed with clock
