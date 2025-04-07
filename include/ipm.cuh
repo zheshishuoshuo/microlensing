@@ -18,7 +18,9 @@
 #include <curand_kernel.h>
 #include <thrust/execution_policy.h> //for thrust::device
 #include <thrust/extrema.h> //for thrust::min_element, thrust::max_element
-#include <thrust/fill.h> // for thrust::fill
+#include <thrust/fill.h> //for thrust::fill
+#include <thrust/functional.h> //for thrust::plus
+#include <thrust/transform.h> //for thrust::transform
 
 #include <algorithm> //for std::min and std::max
 #include <chrono> //for setting random seed with clock
@@ -985,10 +987,11 @@ private:
 		if (write_parities)
 		{
 			print_verbose("Adding arrays...\n", verbose, 2);
-			set_threads(threads, 16, 16);
-			set_blocks(threads, blocks, num_pixels_y.re, num_pixels_y.im);
-			add_arrays_kernel<T> <<<blocks, threads>>> (pixels_minima, pixels_saddles, pixels, num_pixels_y.im, num_pixels_y.re);
-			if (cuda_error("add_arrays_kernel", true, __FILE__, __LINE__)) return false;
+			thrust::transform(thrust::device, 
+							  pixels_minima, pixels_minima + num_pixels_y.re * num_pixels_y.im, 
+							  pixels_saddles, 
+							  pixels, 
+							  thrust::plus<T>());
 			print_verbose("Done adding arrays.\n\n", verbose, 2);
 		}
 

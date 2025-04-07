@@ -50,33 +50,6 @@ __device__ Complex<T> point_to_pixel(Complex<U> w, Complex<U> hly, Complex<int> 
 }
 
 /******************************************************************************
-add two arrays together
-
-\param arr1 -- pointer to array of values
-\param arr2 -- pointer to array of values
-\param arr3 -- pointer to array of sum
-\param nrows -- number of rows in array
-\param ncols -- number of columns in array
-******************************************************************************/
-template <typename T>
-__global__ void add_arrays_kernel(T* arr1, T* arr2, T* arr3, int nrows, int ncols)
-{
-	int x_index = blockIdx.x * blockDim.x + threadIdx.x;
-	int x_stride = blockDim.x * gridDim.x;
-
-	int y_index = blockIdx.y * blockDim.y + threadIdx.y;
-	int y_stride = blockDim.y * gridDim.y;
-
-	for (int i = x_index; i < ncols; i += x_stride)
-	{
-		for (int j = y_index; j < nrows; j += y_stride)
-		{
-			arr3[j * ncols + i] = arr1[j * ncols + i] + arr2[j * ncols + i];
-		}
-	}
-}
-
-/******************************************************************************
 calculate the histogram of values for the pixel array
 
 \param pixels -- pointer to array of pixels
