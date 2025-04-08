@@ -67,6 +67,8 @@ class Gaussians():
 
         self.profiles = kernel
         self.weights = np.sum(kernel, axis=(1,2))
+        self.radii = self.radii.flatten()
+        self.sigma = self.sigma.flatten()
 
     @property
     def half_light_radii(self):
