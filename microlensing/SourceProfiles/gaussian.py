@@ -51,7 +51,7 @@ class Gaussians():
         :param radius: minimum radius of the 2D profiles in pixels
         '''
         if min_radius is None:
-            self.min_radius = 0
+            min_radius = 0
 
         self.radii, y, x = np.ogrid[min_radius: max_radius + 1,
                                     -max_radius: max_radius + 1,
