@@ -55,7 +55,7 @@ class UniformDisks():
         kernel[mask] = 1
 
         self.profiles = kernel
-        self.weights = np.sum(kernel, axis=0)
+        self.weights = np.sum(kernel, axis=(1,2))
 
     @property
     def half_light_radii(self):
