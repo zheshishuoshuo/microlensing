@@ -22,6 +22,9 @@ class MagMap():
         else:
             self.magnifications = magnifications
 
+        if self.magnifications.ndim != 2:
+            raise ValueError("magnifications must be a 2D array")
+
         self.center = tuple(center)
         self.half_length = tuple(half_length)
 
