@@ -35,10 +35,11 @@ class UniformDisk():
 
 class UniformDisks():
 
-    def __init__(self, max_radius: int, min_radius: int = None):
+    def __init__(self, max_radius: int, min_radius: int = None, step: int = 1):
         '''
         :param max_radius: maximum radius of the 2D profiles in pixels
         :param radius: minimum radius of the 2D profiles in pixels
+        :param step: step size for the radius in pixels
         '''
         if min_radius is None:
             min_radius = 0
@@ -48,7 +49,7 @@ class UniformDisks():
                            2 * max_radius + 1, 2 * max_radius + 1),
                           dtype=np.int8)
 
-        self.radii, y, x = np.ogrid[min_radius: max_radius + 1,
+        self.radii, y, x = np.ogrid[min_radius: max_radius + 1: step,
                                     -max_radius: max_radius + 1,
                                     -max_radius: max_radius + 1]
         mask = x**2 + y**2 <= self.radii**2
