@@ -5,7 +5,7 @@ from microlensing.IPM.ipm import IPM
 from . import util
 
 
-def constant_source(ipm: IPM, source, positions = 1):
+def constant_source(ipm: IPM, source, positions = 1, return_pos: bool = False):
     '''
     Return the magnification(s) for the provided magnification map,
     constant source profile, and position(s)
@@ -18,6 +18,7 @@ def constant_source(ipm: IPM, source, positions = 1):
     :param positions: either a position in the magnification map, 
                       a collection of positions,
                       or an integer number of random positions
+    :param return_pos: whether to also return positions used
     '''
     if np.ndim(source.profile) != 2:
         raise ValueError("source.profile must be a 2D array")
@@ -37,9 +38,11 @@ def constant_source(ipm: IPM, source, positions = 1):
     
     magnifications = interp(positions)
     
+    if return_pos:
+        return magnifications, positions
     return magnifications
 
-def changing_source(ipm: IPM, source, positions = 1):
+def changing_source(ipm: IPM, source, positions = 1, return_pos: bool = False):
     '''
     Return the magnifications for the provided magnification map, 
     changing source profiles, and position(s)
@@ -53,6 +56,7 @@ def changing_source(ipm: IPM, source, positions = 1):
     :param positions: either a position in the magnification map, 
                       a collection of positions,
                       or an integer number of random positions
+    :param return_pos: whether to also return positions used
     '''
     if np.ndim(source.profiles) != 3:
         raise ValueError("source.profiles must be a 3D array")
@@ -107,4 +111,6 @@ def changing_source(ipm: IPM, source, positions = 1):
                              axis=(-2,-1)) 
                       / source.weights) # and normalize!
     
+    if return_pos:
+        return magnifications, positions
     return magnifications
