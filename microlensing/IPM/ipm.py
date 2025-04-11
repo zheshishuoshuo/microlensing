@@ -422,9 +422,6 @@ class IPM(object):
                                                  shape=(self.num_stars, 3)).copy(),
                            self.rectangular, self.corner, self.theta_star)
         
-        return MagMap(self.magnifications, self.center, self.half_length, 
-                      self.kappa_tot, self.shear, self.kappa_star, self.stars)
-        
     @property
     def t_shoot_cells(self):
         return self.lib.get_t_shoot_cells(self.obj)
