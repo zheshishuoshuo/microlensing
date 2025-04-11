@@ -25,7 +25,7 @@ def get_borders(ipm: IPM, kernel):
 
     :param ipm: formally, an IPM instance that has ran and has a magnification
                 map. in general, any object that has attributes magnifications,
-                center, half_length, and num_pixels, in (y1,y2) coordinates
+                center, half_length, num_pixels, and pixel_scales, in (y1,y2) coordinates
     :param kernel: kernel of the source profile    
     :return: (y1_min, y1_max), (y2_min, y2_max)
     '''
@@ -42,7 +42,7 @@ def random_position(ipm: IPM, kernel, num: int = 1):
 
     :param ipm: formally, an IPM instance that has ran and has a magnification
                 map. in general, any object that has attributes magnifications,
-                center, half_length, and num_pixels, in (y1,y2) coordinates
+                center, half_length, num_pixels, and pixel_scales, in (y1,y2) coordinates
     :param kernel: kernel of the source profile
     :param num: number of random positions to return
     '''
@@ -62,7 +62,7 @@ def valid_positions(positions, ipm: IPM, kernel):
     :param positions: positions to check
     :param ipm: formally, an IPM instance that has ran and has a magnification
                 map. in general, any object that has attributes magnifications,
-                center, half_length, and num_pixels, in (y1,y2) coordinates
+                center, half_length, num_pixels, and pixel_scales, in (y1,y2) coordinates
     :param kernel: kernel of the source profile
     '''
     if np.ndim(kernel) != 2:

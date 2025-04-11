@@ -12,7 +12,7 @@ def constant_source(ipm: IPM, source, positions = 1, return_pos: bool = False):
 
     :param ipm: formally, an IPM instance that has ran and has a magnification
                 map. in general, any object that has attributes magnifications,
-                center, half_length, and num_pixels, in (y1,y2) coordinates
+                center, half_length, num_pixels, and pixel_scales, in (y1,y2) coordinates
     :param source: source object that must contain a 2D kernel as source.profile
                    and weight (sum of the kernel) as source.weight
     :param positions: either a position in the magnification map, 
@@ -49,7 +49,7 @@ def changing_source(ipm: IPM, source, positions = 1, return_pos: bool = False):
 
     :param ipm: formally, an IPM instance that has ran and has a magnification
                 map. in general, any object that has attributes magnifications,
-                center, half_length, and num_pixels, in (y1,y2) coordinates
+                center, half_length, num_pixels, and pixel_scales, in (y1,y2) coordinates
     :param source: source object that must contain a list of 2D kernels as source.profiles
                    and weights (sums of the kernels) as source.weights.
                    kernels must all have the same shape
