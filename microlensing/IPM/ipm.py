@@ -454,17 +454,21 @@ class IPM(object):
         if 'cmap' not in kwargs.keys():
             kwargs['cmap'] = 'viridis_r'
 
-        extent = [(self.center[0] - self.half_length[0]) / self.theta_star,
-                  (self.center[0] + self.half_length[0]) / self.theta_star,
-                  (self.center[1] - self.half_length[1]) / self.theta_star,
-                  (self.center[1] + self.half_length[1]) / self.theta_star]
+        extent = [(self.center[0] - self.half_length[0]),
+                  (self.center[0] + self.half_length[0]),
+                  (self.center[1] - self.half_length[1]),
+                  (self.center[1] + self.half_length[1])]
 
         img = ax.imshow(self.magnitudes, extent=extent, **kwargs)
         cbar = ax.get_figure().colorbar(img, label='microlensing $\\Delta m$ (magnitudes)')
         cbar.ax.invert_yaxis()
 
-        ax.set_xlabel('$y_1 / \\theta_★$')
-        ax.set_ylabel('$y_2 / \\theta_★$')
+        if self.theta_star == 1:
+            ax.set_xlabel('$y_1 / \\theta_★$')
+            ax.set_ylabel('$y_2 / \\theta_★$')
+        else:
+            ax.set_xlabel('$y_1$')
+            ax.set_ylabel('$y_2$')
 
     def plot_hist(self, ax: matplotlib.axes.Axes, bins=None, **kwargs):
         if bins is None:

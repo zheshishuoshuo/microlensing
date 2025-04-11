@@ -359,8 +359,12 @@ class CCF(object):
         
         ax.plot(self.critical_curves[:,:,0].T, self.critical_curves[:,:,1].T, **kwargs)
 
-        ax.set_xlabel('$x_1 / \\theta_★$')
-        ax.set_ylabel('$x_2 / \\theta_★$')
+        if self.theta_star == 1:
+            ax.set_xlabel('$x_1 / \\theta_★$')
+            ax.set_ylabel('$x_2 / \\theta_★$')
+        else:
+            ax.set_xlabel('$x_1$')
+            ax.set_ylabel('$x_2$')
 
     def plot_caustics(self, ax: matplotlib.axes.Axes, **kwargs):
         if 'c' not in kwargs.keys() and 'color' not in kwargs.keys():
@@ -368,5 +372,9 @@ class CCF(object):
         
         ax.plot(self.caustics[:,:,0].T, self.caustics[:,:,1].T, **kwargs)
 
-        ax.set_xlabel('$y_1 / \\theta_★$')
-        ax.set_ylabel('$y_2 / \\theta_★$')
+        if self.theta_star == 1:
+            ax.set_xlabel('$y_1 / \\theta_★$')
+            ax.set_ylabel('$y_2 / \\theta_★$')
+        else:
+            ax.set_xlabel('$y_1$')
+            ax.set_ylabel('$y_2$')
