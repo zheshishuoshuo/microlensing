@@ -353,6 +353,17 @@ class CCF(object):
         if not self.lib.save(self.obj, self.verbose):
             raise Exception("Error saving CCF")
 
+    @property
+    def mu_length_scales_weights(self):
+        if self.mu_length_scales is None:
+            raise ValueError("mu_length_scales is None")
+        
+        # distances between subsequent caustic points
+        dists = np.linalg.norm(self.caustics[:, 1:] - self.caustics[:, :-1], axis=2)
+        dists = (np.insert(dists, 0, 0, axis=1) + np.insert(dists, dists.shape[1], 0, axis=1)) / 2
+
+        return dists
+
     def plot_critical_curves(self, ax: matplotlib.axes.Axes, **kwargs):
         if 'c' not in kwargs.keys() and 'color' not in kwargs.keys():
             kwargs['c'] = 'black'
@@ -378,3 +389,20 @@ class CCF(object):
         else:
             ax.set_xlabel('$y_1$')
             ax.set_ylabel('$y_2$')
+
+    def plot_mu_length_scales_hist(self, ax: matplotlib.axes.Axes, bins=None, where=..., **kwargs):
+        if bins is None:
+            vmin, vmax = (np.min(np.log10(self.mu_length_scales[where])), 
+                          np.max(np.log10(self.mu_length_scales[where])))
+            bins = np.arange(vmin - 0.01, vmax + 0.01, 0.01)
+
+        ax.hist(np.log10(self.mu_length_scales[where]).ravel(), 
+                weights=self.mu_length_scales_weights[where].ravel(), 
+                density=True, bins=bins, **kwargs)
+        
+        if self.theta_star == 1:
+            ax.set_xlabel("$\\log (d_0 / \\theta_★)$")
+            ax.set_ylabel("$p(\\log (d_0 / \\theta_★))$")
+        else:
+            ax.set_xlabel("$\\log d_0$")
+            ax.set_ylabel("$p(\\log d_0)$")
