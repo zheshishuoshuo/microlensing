@@ -48,9 +48,11 @@ class Stars():
         if 'marker' not in kwargs.keys():
             kwargs['marker'] = '*'
 
-        ax.scatter(self.stars[:, 0] / self.theta_star,
-                   self.stars[:, 1] / self.theta_star,
-                   **kwargs)
+        ax.scatter(self.stars[:, 0], self.stars[:, 1], **kwargs)
 
-        ax.set_xlabel('$x_1 / \\theta_★$')
-        ax.set_ylabel('$x_2 / \\theta_★$')
+        if self.theta_star == 1:
+            ax.set_xlabel('$x_1 / \\theta_★$')
+            ax.set_ylabel('$x_2 / \\theta_★$')
+        else:
+            ax.set_xlabel('$x_1$')
+            ax.set_ylabel('$x_2$')
