@@ -9,8 +9,6 @@ class ChromaticMicrolensing(PropagationEffect):
 
     def __init__(self, mu, phases, wavelengths=None, **kwargs):
         """
-        Parameters
-        ----------
         :param mu: If 2D, array of magnification as a function of
                    phase (axis=0) and wavelength (axis=1)
                    If 1D, array of magnification as a function of phase
@@ -18,7 +16,6 @@ class ChromaticMicrolensing(PropagationEffect):
         :param wavelengths: Array of wavelengths in Angstroms. If passed, mu
                             must be a 2D array
         """
-
         if not isinstance(mu, np.ndarray):
             mu = np.array(mu)
 
