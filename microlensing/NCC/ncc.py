@@ -9,7 +9,7 @@ class NCC(object):
     def __init__(self, infile_prefix: str = None, 
                  center_y1: float = None, center_y2: float = None, half_length_y1: float = None, half_length_y2: float = None,
                  num_pixels_y1: int = None, num_pixels_y2: int = None, over_sample: int = None,
-                 write_maps: bool = None, write_histograms: bool = None,
+                 write_maps: bool = False, write_histograms: bool = False,
                  outfile_prefix: str = None, verbose: int = 0):
         '''
         :param infile_prefix: prefix to be used when reading in files
@@ -25,6 +25,7 @@ class NCC(object):
         :param write_maps: whether to write number of caustic crossings maps or not
         :param write_histograms: whether to write histograms or not
         :param outfile_prefix: prefix to be used in output file names
+        :param verbose: verbosity level of messages. must be 0, 1, 2, or 3
         '''
         self.lib = lib_ncc.lib
 
@@ -88,7 +89,7 @@ class NCC(object):
     @half_length_y1.setter
     def half_length_y1(self, value):
         if value is not None:
-            if value < 0:
+            if value <= 0:
                 raise ValueError("half_length_y1 must be > 0")
             self.lib.set_half_length_y1(self.obj, value)
 
@@ -99,7 +100,7 @@ class NCC(object):
     @half_length_y2.setter
     def half_length_y2(self, value):
         if value is not None:
-            if value < 0:
+            if value <= 0:
                 raise ValueError("half_length_y2 must be > 0")
             self.lib.set_half_length_y2(self.obj, value)
 

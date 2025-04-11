@@ -10,7 +10,7 @@ class CCF(object):
                  theta_star: float = None, mass_function: str = None, m_solar: float = None, m_lower: float = None, m_upper: float = None,
                  rectangular: bool = None, approx: bool = None, safety_scale: float = None,
                  num_stars: int = None, starfile: str = None, num_phi: int = None, num_branches: int = None, random_seed: int = None,
-                 write_stars: bool = None, write_critical_curves: bool = None, write_caustics: bool = None, write_length_scales: bool = None,
+                 write_stars: bool = False, write_critical_curves: bool = False, write_caustics: bool = False, write_length_scales: bool = False,
                  outfile_prefix: str = None, verbose: int = 0):
         '''
         :param kappa_tot: total convergence
@@ -26,7 +26,7 @@ class CCF(object):
         :param approx: whether terms for alpha_smooth should be approximated (True) or exact (False)
         :param safety_scale: ratio of the size of the star field to the size of the shooting rectangle
         :param num_stars: number of stars desired
-        :param starfile: the location of a binary file containing values for num_stars, rectangular, corner, theta_star, and the star positions and masses,
+        :param starfile: the location of a binary file containing values for num_stars, rectangular, corner, theta_star, and the star positions and masses.
                          A whitespace delimited text file where each line contains the x1 and x2 coordinates and the mass of a microlens, in units where 
                          theta_star = 1, is also accepted. If provided, this takes precedence for all star information
         :param num_phi: number of steps used to vary phi in the range [0, 2*pi]
@@ -37,6 +37,7 @@ class CCF(object):
         :param write_caustics: whether to write caustics or not
         :param write_length_scales: whether to write magnification length scales or not
         :param outfile_prefix: prefix to be used in output file names
+        :param verbose: verbosity level of messages. must be 0, 1, 2, or 3
         '''
         self.lib = lib_ccf.lib
 
@@ -57,10 +58,10 @@ class CCF(object):
             self.m_upper = m_upper
             if self.m_lower > self.m_upper:
                 raise ValueError("m_lower must be <= m_upper")
+            self.rectangular = rectangular
             self.num_stars = num_stars
             self.random_seed = random_seed
 
-        self.rectangular = rectangular
         self.approx = approx
         self.safety_scale = safety_scale
         
@@ -135,8 +136,8 @@ class CCF(object):
     @theta_star.setter
     def theta_star(self, value):
         if value is not None:
-            if value < 0:
-                raise ValueError("theta_star must be >= 0")
+            if value <= 0:
+                raise ValueError("theta_star must be > 0")
             self.lib.set_theta_star(self.obj, value)
 
     @property
@@ -157,8 +158,8 @@ class CCF(object):
     @m_solar.setter
     def m_solar(self, value):
         if value is not None:
-            if value < 0:
-                raise ValueError("m_solar must be >= 0")
+            if value <= 0:
+                raise ValueError("m_solar must be > 0")
             self.lib.set_m_solar(self.obj, value)
 
     @property
@@ -168,8 +169,8 @@ class CCF(object):
     @m_lower.setter
     def m_lower(self, value):
         if value is not None:
-            if value < 0:
-                raise ValueError("m_lower must be >= 0")
+            if value <= 0:
+                raise ValueError("m_lower must be > 0")
             self.lib.set_m_lower(self.obj, value)
 
     @property
@@ -179,8 +180,8 @@ class CCF(object):
     @m_upper.setter
     def m_upper(self, value):
         if value is not None:
-            if value < 0:
-                raise ValueError("m_upper must be >= 0")
+            if value <= 0:
+                raise ValueError("m_upper must be > 0")
             self.lib.set_m_upper(self.obj, value)
 
     @property

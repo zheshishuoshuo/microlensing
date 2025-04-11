@@ -1,7 +1,6 @@
 from . import lib_ipm
 from . import lib_ipm_double
 from microlensing.Stars.stars import Stars
-from microlensing.MagMap.mag_map import MagMap
 
 import numpy as np
 import matplotlib.axes
@@ -13,7 +12,7 @@ class IPM(object):
                  light_loss: float = None, rectangular: bool = None, approx: bool = None, safety_scale: float = None,
                  starfile: str = None, center_y1: float = None, center_y2: float = None, half_length_y1: float = None, half_length_y2: float = None,
                  num_pixels_y1: int = None, num_pixels_y2: int = None, num_rays_y: int = None, random_seed: int = None,
-                 write_stars: bool = None, write_maps: bool = None, write_parities: bool = None, write_histograms: bool = None,
+                 write_stars: bool = False, write_maps: bool = False, write_parities: bool = False, write_histograms: bool = False,
                  outfile_prefix: str = None, verbose: int = 0, is_double: bool = False):
         '''
         :param kappa_tot: total convergence
@@ -29,7 +28,7 @@ class IPM(object):
         :param rectangular: whether the star field is rectangular (True) or circular (False)
         :param approx: whether terms for alpha_smooth should be approximated (True) or exact (False)
         :param safety_scale: ratio of the size of the star field to the size of the shooting rectangle
-        :param starfile: the location of a binary file containing values for num_stars, rectangular, corner, theta_star, and the star positions and masses,
+        :param starfile: the location of a binary file containing values for num_stars, rectangular, corner, theta_star, and the star positions and masses.
                          A whitespace delimited text file where each line contains the x1 and x2 coordinates and the mass of a microlens, in units where 
                          theta_star = 1, is also accepted. If provided, this takes precedence for all star information
         :param center_y1: y1 coordinate of the center of the magnification map
@@ -45,6 +44,7 @@ class IPM(object):
         :param write_parities: whether to write parity specific magnification maps or not
         :param write_histograms: whether to write histograms or not
         :param outfile_prefix: prefix to be used in output file names
+        :param verbose: verbosity level of messages. must be 0, 1, 2, or 3
         :param is_double: whether to use float or double library
         '''
         if is_double:
@@ -69,10 +69,10 @@ class IPM(object):
             self.m_upper = m_upper
             if self.m_lower > self.m_upper:
                 raise ValueError("m_lower must be <= m_upper")
+            self.rectangular = rectangular
             self.random_seed = random_seed
 
         self.light_loss = light_loss
-        self.rectangular = rectangular
         self.approx = approx
         self.safety_scale = safety_scale
         
@@ -149,8 +149,8 @@ class IPM(object):
     @theta_star.setter
     def theta_star(self, value):
         if value is not None:
-            if value < 0:
-                raise ValueError("theta_star must be >= 0")
+            if value <= 0:
+                raise ValueError("theta_star must be > 0")
             self.lib.set_theta_star(self.obj, value)
 
     @property
@@ -171,8 +171,8 @@ class IPM(object):
     @m_solar.setter
     def m_solar(self, value):
         if value is not None:
-            if value < 0:
-                raise ValueError("m_solar must be >= 0")
+            if value <= 0:
+                raise ValueError("m_solar must be > 0")
             self.lib.set_m_solar(self.obj, value)
 
     @property
@@ -182,8 +182,8 @@ class IPM(object):
     @m_lower.setter
     def m_lower(self, value):
         if value is not None:
-            if value < 0:
-                raise ValueError("m_lower must be >= 0")
+            if value <= 0:
+                raise ValueError("m_lower must be > 0")
             self.lib.set_m_lower(self.obj, value)
 
     @property
@@ -193,8 +193,8 @@ class IPM(object):
     @m_upper.setter
     def m_upper(self, value):
         if value is not None:
-            if value < 0:
-                raise ValueError("m_upper must be >= 0")
+            if value <= 0:
+                raise ValueError("m_upper must be > 0")
             self.lib.set_m_upper(self.obj, value)
 
     @property
@@ -204,7 +204,7 @@ class IPM(object):
     @light_loss.setter
     def light_loss(self, value):
         if value is not None:
-            if value < 0:
+            if value <= 0:
                 raise ValueError("light_loss must be > 0")
             elif value > 0.01:
                 raise ValueError("light_loss must be <= 0.01")
@@ -277,7 +277,7 @@ class IPM(object):
     @half_length_y1.setter
     def half_length_y1(self, value):
         if value is not None:
-            if value < 0:
+            if value <= 0:
                 raise ValueError("half_length_y1 must be > 0")
             self.lib.set_half_length_y1(self.obj, value)
 
@@ -288,7 +288,7 @@ class IPM(object):
     @half_length_y2.setter
     def half_length_y2(self, value):
         if value is not None:
-            if value < 0:
+            if value <= 0:
                 raise ValueError("half_length_y2 must be > 0")
             self.lib.set_half_length_y2(self.obj, value)
 
