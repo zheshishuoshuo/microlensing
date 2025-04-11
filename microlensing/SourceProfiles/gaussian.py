@@ -44,16 +44,13 @@ class Gaussian():
 
 class Gaussians():
 
-    def __init__(self, max_radius: int, min_radius: int = None, step: int = 1):
+    def __init__(self, max_radius: int, min_radius: int = 0, step: int = 1):
         '''
         :param max_radius: maximum radius of the 2D profiles in pixels that
                            contains 0.999 of the flux
         :param radius: minimum radius of the 2D profiles in pixels
         :param step: step size for the radius in pixels
         '''
-        if min_radius is None:
-            min_radius = 0
-
         self.radii, y, x = np.ogrid[min_radius: max_radius + 1: step,
                                     -max_radius: max_radius + 1,
                                     -max_radius: max_radius + 1]

@@ -35,15 +35,12 @@ class UniformDisk():
 
 class UniformDisks():
 
-    def __init__(self, max_radius: int, min_radius: int = None, step: int = 1):
+    def __init__(self, max_radius: int, min_radius: int = 0, step: int = 1):
         '''
         :param max_radius: maximum radius of the 2D profiles in pixels
         :param radius: minimum radius of the 2D profiles in pixels
         :param step: step size for the radius in pixels
         '''
-        if min_radius is None:
-            min_radius = 0
-
         # use np.int8 to minimize memory, since it is just 0s and 1s
         kernel = np.zeros((max_radius - min_radius + 1,
                            2 * max_radius + 1, 2 * max_radius + 1),
