@@ -15,7 +15,7 @@ Further details can be found at https://github.com/weisluke/microlensing'''
 
 setup(
     name='microlensing',
-    version='0.1.3',
+    version='0.1.4',
     description='A package for microlensing simulations',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -26,5 +26,6 @@ setup(
     license="GNU AFFERO GENERAL PUBLIC LICENSE",
     platforms=['linux_x86_64'],
     package_data={"microlensing.lib": ["*.so"]},
-    install_requires=['numpy', 'scipy', 'astropy', 'matplotlib', 'sncosmo']
+    python_requires='>=3.10',
+    install_requires=['numpy', 'scipy', 'astropy', 'matplotlib', 'sncosmo>=2.10']
 )
