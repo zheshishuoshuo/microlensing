@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.signal import convolve
+from scipy.signal import correlate
 
 from microlensing.IPM.ipm import IPM
 from . import util
@@ -31,9 +31,12 @@ def constant_source(ipm: IPM, source, positions = 1, return_pos: bool = False):
         if not util.valid_positions(positions, ipm, source.profile):
             raise ValueError("provided positions do not lie within the necessary border")
 
-    # convolve map and normalize
-    convolved_map = convolve(ipm.magnifications, source.profile, mode='same') / source.weight
-    interp = util.interpolated_map(convolved_map, ipm.center, 
+    # cross correlate map and profile and normalize
+    # contrary to what is commonly stated, microlensing is technically a cross 
+    # correlation  with the source profile, NOT a convolution
+    # the difference only matters for non-radially symmetric sources
+    correlated_map = correlate(ipm.magnifications, source.profile, mode='same') / source.weight
+    interp = util.interpolated_map(correlated_map, ipm.center, 
                                    ipm.half_length, ipm.num_pixels)
     
     magnifications = interp(positions)
