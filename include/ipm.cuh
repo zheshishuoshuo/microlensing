@@ -889,7 +889,9 @@ private:
 		END create root node, then create children and sort stars
 		******************************************************************************/
 
-		expansion_order = std::ceil(2 * std::log2(theta_star) + tree_levels
+		expansion_order = std::ceil(2 * std::log2(theta_star)
+									+ std::log2(mean_mass2) - std::log2(mean_mass)
+									+ tree_levels
 									- std::log2(root_half_length) - std::log2(alpha_error));
 		set_param("expansion_order", expansion_order, expansion_order, verbose, true);
 		if (expansion_order < 3)
