@@ -62,7 +62,7 @@ def moving_source(ncc: NCC, angle: float = 90):
     d_caustic = rotate(d_caustic, angle + 180, reshape=True, order=0)
     d_caustic = d_caustic * ncc.pixel_scales[0] # scale pixel distances to physical
 
-    # remove borderse from rotations
+    # remove borders from rotations
     dy1 = (d_caustic.shape[1] - ncc.num_pixels_y1) // 2
     dy2 = (d_caustic.shape[0] - ncc.num_pixels_y2) // 2
     d_caustic = d_caustic[dy2:dy2 + ncc.num_pixels_y2,
