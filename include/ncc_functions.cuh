@@ -160,7 +160,7 @@ calculate the number of caustic crossings
 \param hly -- half length of the source plane receiving region
 \param num -- array of number of caustic crossings
 \param npixels -- number of pixels per side for the square region
-\int percentage -- pointer to percentage complete
+\param percentage -- pointer to percentage complete
 \param verbose -- verbose level
 ******************************************************************************/
 template <typename T>

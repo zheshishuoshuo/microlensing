@@ -106,7 +106,7 @@ shoot rays from image plane to source plane
 \param pixsad -- pointer to array of negative parity pixels
 \param pixels -- pointer to array of pixels
 \param npixels -- number of pixels for one side of the receiving square
-\int percentage -- pointer to percentage complete
+\param percentage -- pointer to percentage complete
 \param verbose -- verbose level
 ******************************************************************************/
 template <typename T>
