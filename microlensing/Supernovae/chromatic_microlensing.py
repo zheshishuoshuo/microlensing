@@ -48,8 +48,7 @@ class ChromaticMicrolensing(PropagationEffect):
 
         if (mu.shape[0] != phases.shape[0]
                 or mu.shape[1] != wavelengths.shape[0]):
-            raise ValueError("Dimensions of mu do not match provided phases"
-                             "and wavelengths")
+            raise ValueError("Dimensions of mu do not match provided phases and wavelengths")
 
         self.mu = RegularGridInterpolator((phases, wavelengths), mu)
 
