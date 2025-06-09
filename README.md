@@ -10,14 +10,14 @@ all on GPUs.
 ## Methods
 We utilize Inverse Polygon Mapping (IPM, Mediavilla et al. [2006](https://ui.adsabs.harvard.edu/abs/2006ApJ...653..942M/abstract), [2011](https://ui.adsabs.harvard.edu/abs/2011ApJ...741...42M/abstract)), combined with the Fast Multipole Method (FMM, Greengard and Rokhlin [1987](https://ui.adsabs.harvard.edu/abs/1987JCoPh..73..325G/abstract)) as suggested and used by Jiménez-Vicente and Mediavilla ([2022](https://ui.adsabs.harvard.edu/abs/2022ApJ...941...80J/abstract)) for CPUs, in order to generate magnification maps. Calculations for allocating the areas of the IPM cells among the pixels to which they map use the Sutherland-Hodgman ([1974](https://doi.org/10.1145/360767.360802)) algorithm.
 
-We utilize Witt's ([1990](https://ui.adsabs.harvard.edu/abs/1990A&A...236..311W)) method to locate the microlensing critical curves and caustics, while taking advantage of the FMM again to decrease computation time for terms involving derivatives of the microlensing potential. In order to locate the roots of the parametric critical curve equation, we employ the [Aberth](https://doi.org/10.2307/2005621)-[Ehrlich](https://doi.org/10.1145/363067.363115) method, a cubically convergent algorithm that allows for simultaneous approximations of the roots of a polynomial. 
+We use Witt's ([1990](https://ui.adsabs.harvard.edu/abs/1990A&A...236..311W)) method to locate the microlensing critical curves and caustics, while taking advantage of the FMM again to decrease computation time for terms involving derivatives of the microlensing potential. In order to locate the roots of the parametric critical curve equation, we employ the [Aberth](https://doi.org/10.2307/2005621)-[Ehrlich](https://doi.org/10.1145/363067.363115) method, a cubically convergent algorithm that allows for simultaneous approximations of the roots of a polynomial. 
 
 We use the fact that the caustics are clockwise (under the chosen critical curve parametrization) oriented closed curves to utilize the winding number in order to calculate a two dimensional map of the the number of caustic crossings (Wambsganss et al. [1992](https://ui.adsabs.harvard.edu/abs/1992A&A...258..591), Granot et al. [2003](https://ui.adsabs.harvard.edu/abs/2003ApJ...583..575G)). We use Sunday's ([2001](https://web.archive.org/web/20130126163405/http://geomalgorithms.com/a03-_inclusion.html)) algorithm to calculate the winding number of the discretized caustic polygons around the center of every pixel, efficiently creating a map that provides the number of caustic crossings.
 
 ## Credits
-You are free to use this code under the provided license. A paper (or two) will appear at some point in the near future; if you use the code, appropriate citation(s) would be appreciated when/where necessary. Suggested improvements and bugfixes are also always appreciated! 
+You are free to use this code under the provided license. If you happen to use it for any work that leads to publications, it would be much appreciated if you cite the appropriate paper for either creating magnification maps ([here](https://ui.adsabs.harvard.edu/abs/2025arXiv250602114W/abstract)), or for calculating critical curves, caustics, and the number of caustic crossings ([here](https://ui.adsabs.harvard.edu/abs/2025arXiv250602121W/abstract)). 
 
-I make no promise that the current state of the code will stay the same, or that things will always be backwards compatible. Poor design choices I made in the past may need be changed to make the future better!
+I make no promise that the current state of the code will stay the same, or that things will always be backwards compatible. Poor design choices I made in the past may need be changed to make the future better! Suggested improvements and bugfixes are also always appreciated. 
 
 I would love to be considered for involvement in any projects which make use of these tools, as I'd like to think I bring a bit of microlensing knowledge to the table :). I can be reached at [weisluke@alum.mit.edu](mailto:weisluke@alum.mit.edu).
 
@@ -28,7 +28,7 @@ The code is written to be independent of anything besides the C++ standard libra
 The bulk of the code is written using NVIDIA's CUDA, and you will need a CUDA installation to compile and run it. We additionally require a C++20 compliant compiler.
 
 ## Repository layout
-The `include` directory contains the bulk of the code, which is written mostly as templated objects and functions. The `src` directory contains files for creating executables and libraries. The `bin` directory holds [compilation](#compiling) output. The `microlensing` directory contains [python](#python) code for ease of use, while the root directory contains a couple example python notebooks outlining usage.
+The `include` directory contains the bulk of the code, which is written mostly as templated objects and functions. The `src` directory contains files for creating executables and libraries. The `bin` directory holds [compilation](#compiling) output. The `microlensing` directory contains [python](#python) code for ease of use, while the `examples` directory contains example python notebooks outlining usage.
 
 ## Compiling
 Compilation has been tested with the GNU compiler version 11.2.0 and the CUDA compiler version 12.4.
@@ -44,7 +44,7 @@ source compile
 ```
 to run the compilation file. This should create 5 executables and 4 libraries in the `bin` directory. 
 
-I'll note that this repository contains the 4 libraries precompiled and placed in the `./microlensing/lib/` directory already. These libraries may or may not work on your hardware, as they were compiled for a particular cluster (NERSC), but you can try running the example [python](#python) notebook first to see if they do. They *should* work for Linux distributions that have GLIBC >= 2.31 and GLIBCXX >= 3.4.29, but no promises. If there are errors, you will need to compile everything yourself.
+I'll note that this repository contains the 4 libraries precompiled and placed in the `./microlensing/lib/` directory already. These libraries may or may not work on your hardware, as they were compiled for a particular cluster (NERSC), but you can try running the example [python](#python) notebooks first to see if they do. They *should* work for Linux distributions that have GLIBC >= 2.31 and GLIBCXX >= 3.4.29, but no promises. If there are errors, you will need to compile everything yourself (though I'm happy to do my best to help with that if need be).
 
 ## python
 
