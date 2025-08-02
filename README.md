@@ -31,7 +31,9 @@ The bulk of the code is written using NVIDIA's CUDA, and you will need a CUDA in
 The `include` directory contains the bulk of the code, which is written mostly as templated objects and functions. The `src` directory contains files for creating executables and libraries. The `bin` directory holds [compilation](#compiling) output. The `microlensing` directory contains [python](#python) code for ease of use, while the `examples` directory contains example python notebooks outlining usage.
 
 ## Compiling
-Compilation has been tested with the GNU compiler version 11.2.0 and the CUDA compiler version 12.4.
+Compilation has been tested with the GNU compiler version 11.2.0 and the CUDA compiler version 12.4. The provided `compile`
+script targets NVIDIA V100 GPUs (compute capability 7.0). If you wish to build for a different architecture, adjust the
+`-gencode` flags accordingly in that script.
 
 First, clone the repository.
 ```
