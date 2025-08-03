@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "compat_numbers.cuh"
 #include "alpha_local.cuh"
 #include "alpha_smooth.cuh"
 #include "alpha_star.cuh"
@@ -335,13 +336,13 @@ __global__ void find_critical_curve_roots_kernel(T kappa, T gamma, T theta, star
 	T norm;
 	int sgn;
 
-	T dphi = 2 * std::numbers::pi_v<T> / nphi * j;
+    T dphi = 2 * NSTD_PI_V(T) / nphi * j;
 
 	for (int c = z_index; c < nbranches; c += z_stride)
 	{
 		for (int b = y_index; b < 2; b += y_stride)
 		{
-			T phi0 = std::numbers::pi_v<T> / nbranches + c * 2 * std::numbers::pi_v<T> / nbranches;
+                    T phi0 = NSTD_PI_V(T) / nbranches + c * 2 * NSTD_PI_V(T) / nbranches;
 
 			for (int a = x_index; a < nroots; a += x_stride)
 			{
@@ -431,13 +432,13 @@ __global__ void find_errors_kernel(Complex<T>* z, int nroots, T kappa, T gamma, 
 
 	int sgn;
 
-	T dphi = 2 * std::numbers::pi_v<T> / nphi * j;
+    T dphi = 2 * NSTD_PI_V(T) / nphi * j;
 
 	for (int c = z_index; c < nbranches; c += z_stride)
 	{
 		for (int b = y_index; b < 2; b += y_stride)
 		{
-			T phi0 = std::numbers::pi_v<T> / nbranches + c * 2 * std::numbers::pi_v<T> / nbranches;
+                    T phi0 = NSTD_PI_V(T) / nbranches + c * 2 * NSTD_PI_V(T) / nbranches;
 
 			for (int a = x_index; a < nroots; a += x_stride)
 			{
