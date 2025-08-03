@@ -1,4 +1,5 @@
 #pragma once
+#include "compat_numbers.cuh"
 
 #include "array_functions.cuh"
 #include "binomial_coefficients.cuh"
@@ -502,12 +503,12 @@ private:
 				num_stars = std::ceil(
 					safety_scale * 2 * corner.re
 					* safety_scale * 2 * corner.im
-					* kappa_star / (std::numbers::pi_v<T> * theta_star * theta_star * mean_mass)
+                        * kappa_star / (NSTD_PI_V(T) * theta_star * theta_star * mean_mass)
 					);
 				set_param("num_stars", num_stars, num_stars, verbose);
 
 				corner = Complex<T>(std::sqrt(corner.re / corner.im), std::sqrt(corner.im / corner.re));
-				corner *= std::sqrt(std::numbers::pi_v<T> * theta_star * theta_star * num_stars * mean_mass / (4 * kappa_star));
+                    corner *= std::sqrt(NSTD_PI_V(T) * theta_star * theta_star * num_stars * mean_mass / (4 * kappa_star));
 				set_param("corner", corner, corner, verbose);
 			}
 			else
@@ -553,7 +554,7 @@ private:
 		set_param("alpha_error", alpha_error, alpha_error, verbose, !(rectangular && approx) && verbose < 3);
 
 		taylor_smooth = 1;
-		while ((kappa_star * std::numbers::inv_pi_v<T> * 4 / (taylor_smooth + 1) * corner.abs() * (safety_scale + 1) / (safety_scale - 1)
+            while ((kappa_star * NSTD_INV_PI_V(T) * 4 / (taylor_smooth + 1) * corner.abs() * (safety_scale + 1) / (safety_scale - 1)
 				* std::pow(1 / safety_scale, taylor_smooth + 1) > alpha_error)
 				&& taylor_smooth <= MAX_TAYLOR_SMOOTH)
 		{
@@ -564,8 +565,8 @@ private:
 		not in the correct fractional range of pi, increase taylor_smooth
 		this is due to NOT wanting cos(phase * (taylor_smooth - 1)) = 0, within errors
 		******************************************************************************/
-		while ((std::fmod(corner.arg() * (taylor_smooth - 1), std::numbers::pi_v<T>) < 0.1 * std::numbers::pi_v<T> 
-				|| std::fmod(corner.arg() * (taylor_smooth - 1), std::numbers::pi_v<T>) > 0.9 * std::numbers::pi_v<T>)
+            while ((std::fmod(corner.arg() * (taylor_smooth - 1), NSTD_PI_V(T)) < 0.1 * NSTD_PI_V(T)
+                            || std::fmod(corner.arg() * (taylor_smooth - 1), NSTD_PI_V(T)) > 0.9 * NSTD_PI_V(T))
 				&& taylor_smooth <= MAX_TAYLOR_SMOOTH)
 		{
 			taylor_smooth += 2;
@@ -732,7 +733,7 @@ private:
 			if (rectangular)
 			{
 				corner = Complex<T>(std::sqrt(corner.re / corner.im), std::sqrt(corner.im / corner.re));
-				corner *= std::sqrt(std::numbers::pi_v<T> * theta_star * theta_star * num_stars * mean_mass_actual / (4 * kappa_star));
+                            corner *= std::sqrt(NSTD_PI_V(T) * theta_star * theta_star * num_stars * mean_mass_actual / (4 * kappa_star));
 				set_param("corner", corner, corner, verbose, true);
 			}
 			else

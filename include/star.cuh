@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "compat_numbers.cuh"
 #include "complex.cuh"
 #include "mass_functions.cuh"
 #include "util.cuh"
@@ -87,7 +88,7 @@ __global__ void generate_star_field_kernel(curandState* states, star<T>* stars, 
 			/******************************************************************************
 			random angle
 			******************************************************************************/
-			T a = curand_uniform_double(&states[i]) * 2 * std::numbers::pi_v<T>;
+                        T a = curand_uniform_double(&states[i]) * 2 * NSTD_PI_V(T);
 			/******************************************************************************
 			random radius uses square root of random number as numbers need to be evenly
 			dispersed in 2-D space
@@ -152,7 +153,7 @@ void calculate_star_params(int nstars, int rectangular, Complex<T> corner, T the
 
 	if (rectangular)
 	{
-		kappastar = m_tot * std::numbers::pi_v<T> * theta * theta / (4 * corner.re * corner.im);
+       kappastar = m_tot * NSTD_PI_V(T) * theta * theta / (4 * corner.re * corner.im);
 	}
 	else
 	{

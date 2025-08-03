@@ -1,4 +1,5 @@
 #pragma once
+#include "compat_numbers.cuh"
 
 #include "complex.cuh"
 
@@ -88,7 +89,7 @@ __device__ Complex<T> alpha_smooth(Complex<T> z, T kappastar, int rectangular, C
 
 			a_smooth = (corner - z.conj()) * (corner.log() - s1) - (corner.conj() - z.conj()) * (corner.conj().log() - s2)
 				+ (-corner - z.conj()) * ((-corner).log() - s3) - (-corner.conj() - z.conj()) * ((-corner).conj().log() - s4);
-			a_smooth *= Complex<T>(0, -kappastar * std::numbers::inv_pi_v<T>);
+                    a_smooth *= Complex<T>(0, -kappastar * NSTD_INV_PI_V(T));
 			a_smooth -= kappastar * 2 * (corner.re + z.re);
 		}
 		else
@@ -99,7 +100,7 @@ __device__ Complex<T> alpha_smooth(Complex<T> z, T kappastar, int rectangular, C
 			Complex<T> c4 = -corner.conj() - z.conj();
 
 			a_smooth = c1 * c1.log() - c2 * c2.log() + c3 * c3.log() - c4 * c4.log();
-			a_smooth *= Complex<T>(0, -kappastar * std::numbers::inv_pi_v<T>);
+                    a_smooth *= Complex<T>(0, -kappastar * NSTD_INV_PI_V(T));
 			a_smooth -= kappastar * 2 * (corner.re + z.re) * boxcar(z, corner);
 			a_smooth -= kappastar * 4 * corner.re * heaviside(corner.im + z.im) * heaviside(corner.im - z.im) * heaviside(z.re - corner.re);
 		}
@@ -205,8 +206,8 @@ __device__ Complex<T> d_alpha_smooth_d_zbar(Complex<T> z, T kappastar, int recta
 			}
 			d_a_smooth_d_zbar *= 2;
 
-			d_a_smooth_d_zbar *= Complex<T>(0, -kappastar * std::numbers::inv_pi_v<T>);
-			d_a_smooth_d_zbar += kappastar - 4 * kappastar * corner.arg() * std::numbers::inv_pi_v<T>;
+                    d_a_smooth_d_zbar *= Complex<T>(0, -kappastar * NSTD_INV_PI_V(T));
+                    d_a_smooth_d_zbar += kappastar - 4 * kappastar * corner.arg() * NSTD_INV_PI_V(T);
 		}
 		else
 		{
@@ -216,7 +217,7 @@ __device__ Complex<T> d_alpha_smooth_d_zbar(Complex<T> z, T kappastar, int recta
 			Complex<T> c4 = -corner.conj() - z.conj();
 
 			d_a_smooth_d_zbar = c1.log() - c2.log() - c3.log() + c4.log();
-			d_a_smooth_d_zbar *= Complex<T>(0, -kappastar * std::numbers::inv_pi_v<T>);
+                    d_a_smooth_d_zbar *= Complex<T>(0, -kappastar * NSTD_INV_PI_V(T));
 			d_a_smooth_d_zbar -= kappastar * boxcar(z, corner);
 		}
 	}
@@ -272,7 +273,7 @@ __device__ Complex<T> d2_alpha_smooth_d_zbar2(Complex<T> z, T kappastar, int rec
 			d2_a_smooth_d_zbar2 /= z.conj();
 			d2_a_smooth_d_zbar2 *= 2;
 
-			d2_a_smooth_d_zbar2 *= Complex<T>(0, -kappastar * std::numbers::inv_pi_v<T>);
+                    d2_a_smooth_d_zbar2 *= Complex<T>(0, -kappastar * NSTD_INV_PI_V(T));
 		}
 		else
 		{
@@ -282,7 +283,7 @@ __device__ Complex<T> d2_alpha_smooth_d_zbar2(Complex<T> z, T kappastar, int rec
 			Complex<T> c4 = -corner.conj() - z.conj();
 
 			d2_a_smooth_d_zbar2 = -1 / c1 + 1 / c2 + 1 / c3 - 1 / c4;
-			d2_a_smooth_d_zbar2 *= Complex<T>(0, -kappastar * std::numbers::inv_pi_v<T>);
+                    d2_a_smooth_d_zbar2 *= Complex<T>(0, -kappastar * NSTD_INV_PI_V(T));
 		}
 	}
 	else
