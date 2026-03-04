@@ -372,10 +372,11 @@ class CCF(object):
 
         return dists
 
-    def plot_critical_curves(self, ax: Axes, color='black', cmap='viridis', fill_parities=False, plot_phase=False, **kwargs):
+    def plot_critical_curves(self, ax: Axes, color='black', cmap='viridis', xrange=None, yrange=None,
+                             fill_parities=False, plot_phase=False, **kwargs):
 
         if fill_parities:
-            ax.add_collection(plotting.CriticalCurves(self.critical_curves))
+            ax.add_collection(plotting.CriticalCurves(self.critical_curves, xrange, yrange))
 
         if plot_phase:
             norm = Normalize(0, 2 * np.pi)

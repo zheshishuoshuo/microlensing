@@ -27,7 +27,7 @@ def list_order(x):
 
 class CriticalCurves(PatchCollection):
 
-    def __init__(self, critical_curves, **kwargs):
+    def __init__(self, critical_curves, xrange=None, yrange=None, **kwargs):
 
         polygons = []
         order = list_order(critical_curves)
@@ -40,6 +40,13 @@ class CriticalCurves(PatchCollection):
                 polygons[-1] = np.append(polygons[-1], critical_curves[key], axis=0)
                 # and now use that chain's end as the next key
                 key = order.pop(key)
+
+        if xrange is not None and yrange is not None:
+            polygons = [p for p in polygons 
+                        if np.max(p[:,0]) > xrange[0] and
+                           np.min(p[:,0]) < xrange[1] and
+                           np.max(p[:,1]) > yrange[0] and
+                           np.min(p[:,1]) < yrange[1]]
                 
         # sort polygons 
         areas = np.array([shapely.Polygon(x).area for x in polygons])
