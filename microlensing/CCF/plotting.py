@@ -1,7 +1,8 @@
 import numpy as np
 import shapely
 from matplotlib.patches import Polygon
-from matplotlib.collections import PatchCollection
+from matplotlib.collections import LineCollection, PatchCollection
+from matplotlib.colors import Normalize
 
 
 colors = {-1: '#ff7700',  # saddlepoints are orange
@@ -60,3 +61,37 @@ class CriticalCurves(PatchCollection):
         PatchCollection.__init__(self, [Polygon(p, facecolor=colors[np.sign(a)], edgecolor='black', **kwargs)
                                         for p, a in zip(polygons, areas)], 
                                  match_original=True)
+
+class PhaseCurves(LineCollection):
+
+    def __init__(self, critical_curves, num_roots, num_phi, num_branches,
+                 xrange=None, yrange=None, cmap='viridis', **kwargs):
+        # critical curve shape = (num_roots * num_branches, num_phi / num_branches + 1, 2)
+
+        # starting points of the branches
+        phi = np.linspace(0, 2 * np.pi, num_branches, endpoint=False)[:,None]
+        # add on the range covered by each branch
+        phi = phi + np.linspace(0, 2 * np.pi / num_branches, num_phi // num_branches + 1)
+        # and extend over entirety of critical curves
+        phi = np.repeat([phi.ravel()], num_roots, axis=0).ravel()
+
+        midpoints = (critical_curves[:,:-1] + critical_curves[:, 1:]) / 2
+        start = np.insert(midpoints, 0, critical_curves[:,0], axis=1)
+        end = np.insert(midpoints, midpoints.shape[1], critical_curves[:,-1], axis=1)
+
+        lines = np.concatenate([start, end], axis=2).reshape(-1,2,2)
+
+        if xrange is not None:
+            where = np.argwhere((np.max(lines[:,:,0], axis=1) > xrange[0]) 
+                                & (np.min(lines[:,:,0], axis=1) < xrange[1]))[:,0]
+            lines = lines[where]
+            phi = phi[where]
+
+        if yrange is not None:
+            where = np.argwhere((np.max(lines[:,:,1], axis=1) > yrange[0]) 
+                                & (np.min(lines[:,:,1], axis=1) < yrange[1]))[:,0]
+            lines = lines[where]
+            phi = phi[where]
+
+        norm = Normalize(0, 2 * np.pi)
+        LineCollection.__init__(self, lines, array = phi, cmap=cmap, norm=norm, **kwargs)

@@ -4,8 +4,6 @@ from . import plotting
 
 import numpy as np
 from matplotlib.axes import Axes
-from matplotlib.colors import Normalize
-from matplotlib.collections import LineCollection
 
 
 class CCF(object):
@@ -372,22 +370,15 @@ class CCF(object):
 
         return dists
 
-    def plot_critical_curves(self, ax: Axes, color='black', cmap='viridis', xrange=None, yrange=None,
+    def plot_critical_curves(self, ax: Axes, color='black', xrange=None, yrange=None,
                              fill_parities=False, plot_phase=False, **kwargs):
 
         if fill_parities:
             ax.add_collection(plotting.CriticalCurves(self.critical_curves, xrange, yrange))
 
         if plot_phase:
-            norm = Normalize(0, 2 * np.pi)
-
-            lc = LineCollection(np.concatenate([self.critical_curves[:,:-1],
-                                                self.critical_curves[:,1:]],
-                                               axis=2).reshape(-1,2,2),
-                                array = np.repeat([np.arange(0, self.num_phi) * 2 * np.pi / self.num_phi],
-                                                  self.num_roots, axis=0).ravel(),
-                                cmap=cmap, norm=norm)
-            line = ax.add_collection(lc)
+            line = ax.add_collection(PhaseCurves(self.critical_curves, self.num_roots, self.num_phi, self.num_branches, 
+                                                 xrange, yrange, **kwargs))
             cbar = ax.get_figure().colorbar(line, label = '$\\phi$')
             cbar.set_ticks([0, np.pi, 2 * np.pi])
             cbar.set_ticklabels([0, '$\\pi$', '$2\\pi$'])
@@ -401,17 +392,11 @@ class CCF(object):
             ax.set_xlabel('$x_1$')
             ax.set_ylabel('$x_2$')
 
-    def plot_caustics(self, ax: Axes, color='black', cmap='viridis', plot_phase=False, **kwargs):
+    def plot_caustics(self, ax: Axes, color='black', plot_phase=False, **kwargs):
 
         if plot_phase:
-            norm = Normalize(0, 2 * np.pi)
-
-            lc = LineCollection(np.concatenate([self.caustics[:,:-1],
-                                                self.caustics[:,1:]],
-                                               axis=2).reshape(-1,2,2),
-                                array = np.repeat([np.arange(0, self.num_phi) * 2 * np.pi / self.num_phi],
-                                                  self.num_roots, axis=0).ravel(),
-                                cmap=cmap, norm=norm)
+            line = ax.add_collection(PhaseCurves(self.caustics, self.num_roots, self.num_phi, self.num_branches, 
+                                                 xrange, yrange, **kwargs))
             line = ax.add_collection(lc)
             cbar = ax.get_figure().colorbar(line, label = '$\\phi$')
             cbar.set_ticks([0, np.pi, 2 * np.pi])
