@@ -41,11 +41,14 @@ class CriticalCurves(PatchCollection):
                 # and now use that chain's end as the next key
                 key = order.pop(key)
 
-        if xrange is not None and yrange is not None:
+        if xrange is not None:
             polygons = [p for p in polygons 
                         if np.max(p[:,0]) > xrange[0] and
-                           np.min(p[:,0]) < xrange[1] and
-                           np.max(p[:,1]) > yrange[0] and
+                           np.min(p[:,0]) < xrange[1]]
+
+        if yrange is not None:
+            polygons = [p for p in polygons 
+                        if np.max(p[:,1]) > yrange[0] and
                            np.min(p[:,1]) < yrange[1]]
                 
         # sort polygons 
