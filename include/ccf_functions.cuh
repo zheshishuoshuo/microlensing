@@ -278,19 +278,19 @@ __global__ void find_critical_curve_roots_kernel(T kappa, T gamma, T theta, star
 
 	for (int c = z_index; c < nbranches; c += z_stride)
 	{
+		T phi0 = std::numbers::pi_v<T> / nbranches + c * 2 * std::numbers::pi_v<T> / nbranches;
+		
 		for (int b = y_index; b < 2; b += y_stride)
 		{
-			T phi0 = std::numbers::pi_v<T> / nbranches + c * 2 * std::numbers::pi_v<T> / nbranches;
+			/******************************************************************************
+			we use the following variable to determine whether we are on the positive or
+			negative side of phi0, as we are simultaneously growing 2 sets of roots after
+			having stepped away from the middle by j out of nphi steps
+			******************************************************************************/
+			sgn = (b == 0 ? -1 : 1);
 
 			for (int a = x_index; a < nroots; a += x_stride)
 			{
-				/******************************************************************************
-				we use the following variable to determine whether we are on the positive or
-				negative side of phi0, as we are simultaneously growing 2 sets of roots after
-				having stepped away from the middle by j out of nphi steps
-				******************************************************************************/
-				sgn = (b == 0 ? -1 : 1);
-
 				/******************************************************************************
 				if root has not already been calculated to desired precision
 				we are calculating nbranches * 2 * nroots roots in parallel, so
@@ -303,7 +303,7 @@ __global__ void find_critical_curve_roots_kernel(T kappa, T gamma, T theta, star
 					/******************************************************************************
 					calculate new root
 					center of the roots array (ie the index of phi0) for all branches is
-					( nphi / (2 * nbranches) + c  * nphi / nbranches + c) * nroots
+					(nphi / (2 * nbranches) + c * nphi / nbranches + c) * nroots
 					for the particular value of phi here (i.e., phi0 +/- dphi), roots start
 					at +/- j*nroots of that center
 					a is then added to get the final index of this particular root
