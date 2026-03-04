@@ -491,10 +491,14 @@ class MIF(object):
 
     def plot_images(self, ax: matplotlib.axes.Axes, s=1,
                     is_ellipse=True, log_area=False, mu_min=10**-3,
+                    center_of_light = False,
                     **kwargs):
 
         ax.add_collection(plotting.Images(self.images, self.images_inv_mags,
                                           s, is_ellipse, log_area, mu_min))
+        
+        if center_of_light:            
+            ax.add_patch(plotting.CenterOfLight(self.images, self.images_inv_mags, s=s))
 
     def plot_image_lines(self, ax: matplotlib.axes.Axes, color='black', **kwargs):
 

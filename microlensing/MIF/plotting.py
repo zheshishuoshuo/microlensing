@@ -1,5 +1,6 @@
 import numpy as np
-from matplotlib.patches import Ellipse
+from matplotlib.path import Path
+from matplotlib.patches import Ellipse, PathPatch
 from matplotlib.collections import PatchCollection
 import shapely
 import shapely.plotting
@@ -57,3 +58,16 @@ class Images(PatchCollection):
         inter = [shapely.plotting.patch_from_polygon(what, color = 'black') for what in inter]
 
         PatchCollection.__init__(self, [*ellipses, *inter], match_original=True)
+
+class CenterOfLight(PathPatch):
+    def __init__(self, positions, inv_mags, s=1, facecolor='yellow', **kwargs):
+        mags = 1 / np.abs(np.linalg.det(inv_mags))
+        center_of_light = np.sum(positions * mags[:,None], axis=0) / np.sum(mags)
+
+        triangle = np.array([[0,0], [2,0], [1, np.sqrt(3)], [0,0]]) # equilateral triangle
+        triangle -= np.array([1, 1/np.sqrt(3)]) # centered at the origin
+        triangle *= np.sum(mags) / (np.sqrt(3) * s) # scale area to magnification / s
+        triangle += center_of_light # and moved to the center of light
+
+        path = Path(triangle)
+        PathPatch.__init__(self, path, facecolor=facecolor, **kwargs)

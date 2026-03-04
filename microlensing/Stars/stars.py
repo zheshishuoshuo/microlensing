@@ -74,8 +74,7 @@ class Stars():
 
     def plot(self, ax, color='black', s=1, **kwargs):
 
-        stars = plotting.Stars(self.positions, s * self.masses, np.min(self.masses), np.max(self.masses), 
-                               color=color, **kwargs)
+        stars = plotting.Stars(self.positions, self.masses, s=s, color=color, **kwargs)
         
         ax.add_collection(stars)
 

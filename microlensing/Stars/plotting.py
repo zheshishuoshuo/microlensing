@@ -14,10 +14,6 @@ class Star(PathPatch):
         PathPatch.__init__(self, path, **kwargs)
 
 class Stars(PatchCollection):
-    def __init__(self, centers, masses, minmass=1, maxmass=1, **kwargs):
-        if maxmass != minmass:
-            areas = (masses - minmass) / (maxmass - minmass)
-        else:
-            areas = masses
-        PatchCollection.__init__(self, [Star(center, area) for center, area in zip(centers, areas)], **kwargs)
+    def __init__(self, centers, masses, s=1, **kwargs):
+        PatchCollection.__init__(self, [Star(center, s * mass) for center, mass in zip(centers, masses)], **kwargs)
 
