@@ -1,5 +1,4 @@
 import numpy as np
-import shapely
 from matplotlib.patches import Polygon
 from matplotlib.collections import LineCollection, PatchCollection
 from matplotlib.colors import Normalize
@@ -25,6 +24,12 @@ def list_order(x):
     for a, b in zip(indices, where):
         res[a] = b # dictionary mapping end -> start
     return res
+
+# calculate the area of a polygon defined by a list of points
+# the shoelace formula adds x_i * y_i+1 - x_i+1 * y_i to the area
+# the area is + for counterclockwise, - for clockwise
+def shoelace(x, y):
+    return (np.dot(x, np.roll(y, -1)) - np.dot(y, np.roll(x, -1))) / 2
 
 class CriticalCurves(PatchCollection):
 
@@ -53,8 +58,11 @@ class CriticalCurves(PatchCollection):
                            np.min(p[:,1]) < yrange[1]]
                 
         # sort polygons 
-        areas = np.array([shapely.Polygon(x).area for x in polygons])
-        order = np.argsort(np.abs(areas))
+        # critical curves are traced out such that clockwise encloses positive area,
+        # opposite of what the shoelace formula gives
+        areas = np.array([-shoelace(*p.T) for p in polygons])
+        # argsort sorts from greatest to least, need to reverse for PatchCollection
+        order = np.argsort(np.abs(areas))[::-1]
         polygons = [polygons[x] for x in order]
         areas = areas[order]
 
